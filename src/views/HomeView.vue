@@ -1,18 +1,54 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="product-list">
+    <ProductCard
+      @product-view="productView($event)"
+      v-for="product of products"
+      :key="product.id"
+      :product="product"
+    />
   </div>
+  <ViewProductCard
+    :is-open="active.productViewer"
+    :product="currentProductForView"
+    @close="active.productViewer = false"
+  />
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import ProductCard from "../components/ProductCard.vue";
+import ViewProductCard from "../components/ViewProductCard";
+import products from "../assets/my-store/index";
 
 export default {
   name: "HomeView",
   components: {
-    HelloWorld,
+    ProductCard,
+    ViewProductCard,
+  },
+  data() {
+    return {
+      products: products.state,
+      currentProductForView: null,
+      active: {
+        productViewer: false,
+      },
+    };
+  },
+  methods: {
+    productView(product) {
+      this.currentProductForView = product;
+      this.active.productViewer = true;
+    },
   },
 };
 </script>
+<style>
+.product-list {
+  display: flex;
+  max-width: 80%;
+  margin: auto;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+</style>
