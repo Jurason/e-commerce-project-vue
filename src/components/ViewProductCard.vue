@@ -13,14 +13,14 @@
           type="text"
           placeholder="Enter quantity"
         />&nbsp;
-        <div class="quantity">stock balance {{ remainingInStock }}</div>
+        <div class="quantity">stock balance {{ product.count }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import store from "../assets/my-store/index";
+import { getters, mutations } from "../assets/my-store/index";
 
 export default {
   name: "ViewProductCard",
@@ -40,21 +40,10 @@ export default {
     document.removeEventListener(this.handleKeydown);
   },
   computed: {
-    productQuantity() {
-      console.log("this.product:", this.product);
-      console.log("this.product.id:", this.product.id);
-      console.log(
-        "store.getProductQuantity(this.product.id):",
-        store.getProductQuantity(6)
-      );
-
-      return store.getProductQuantity(this.product);
-    },
-    remainingInStock() {
-      return this.productQuantity - this.quantityInput;
-    },
+    ...getters,
   },
   methods: {
+    ...mutations,
     handleKeydown(e) {
       if (this.isOpen && e.key === "Escape") {
         this.$emit("close");
@@ -62,14 +51,12 @@ export default {
     },
     addToCart() {
       this.updateStoreState();
-      console.log("store.cart:", store.cart);
-      console.log("store.state:", store.state);
     },
     updateStoreState() {
       if (!this.quantityInput) {
         return;
       }
-      store.addProductToCart(this.product, this.quantityInput);
+      this.addProductToCart(this.product, this.quantityInput);
     },
   },
   watch: {

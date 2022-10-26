@@ -17,7 +17,7 @@
 <script>
 import ProductCard from "../components/ProductCard.vue";
 import ViewProductCard from "../components/ViewProductCard";
-import products from "../assets/my-store/index";
+import { getters } from "../assets/my-store/index";
 
 export default {
   name: "HomeView",
@@ -25,9 +25,12 @@ export default {
     ProductCard,
     ViewProductCard,
   },
+  mounted() {
+    this.products = this.getProducts();
+  },
   data() {
     return {
-      products: products.state,
+      products: null,
       currentProductForView: null,
       active: {
         productViewer: false,
@@ -35,6 +38,7 @@ export default {
     };
   },
   methods: {
+    ...getters,
     productView(product) {
       this.currentProductForView = product;
       this.active.productViewer = true;
