@@ -22,7 +22,9 @@
           type="text"
           placeholder="Enter quantity"
         />&nbsp;
-        <div class="quantity">stock balance {{ product.count }}</div>
+        <div class="quantity">
+          stock balance {{ maxQuantityForCurrentProduct }}
+        </div>
       </div>
     </div>
   </div>
@@ -36,6 +38,8 @@ export default {
   data() {
     return {
       quantityInput: null,
+      maxQuantityForCurrentProduct: null,
+      currentProductQuantityInCart: 0,
     };
   },
   props: {
@@ -61,15 +65,16 @@ export default {
         this.$emit("close");
       }
       if (this.quantityInput && e.key === "Enter") {
-        this.updateStoreState();
+        this.updateCartState();
         this.$emit("close");
       }
     },
     addToCart() {
-      this.updateStoreState();
+      this.updateCartState();
+      this.$emit("close");
       this.quantityInput = null;
     },
-    updateStoreState() {
+    updateCartState() {
       if (!this.quantityInput) {
         return;
       }
@@ -78,7 +83,10 @@ export default {
   },
   watch: {
     isOpen() {
-      this.quantityInput = null;
+      this.currentProductQuantityInCart =
+        this.getCartProducts.find((t) => t.id === this.product.id)?.count || 0;
+      this.maxQuantityForCurrentProduct =
+        this.product.count - this.currentProductQuantityInCart;
     },
   },
 };

@@ -3,12 +3,13 @@
   <div class="checkout">
     <div class="items-list">
       <ProductInCart
+        @input-changed="test"
         v-for="product of productsInCart"
         :product="product"
         :key="product.id"
       />
     </div>
-    <CheckoutCard />
+    <CheckoutCard :update="updateKey" />
   </div>
 </template>
 <script>
@@ -28,12 +29,19 @@ export default {
   data() {
     return {
       productsInCart: [],
+      //костыль, хотя тут весь код один сплошной костыль
+      updateKey: 0,
     };
   },
   computed: {
     ...getters,
   },
-  methods: {},
+  methods: {
+    test() {
+      console.log("Input Changed!");
+      this.updateKey++;
+    },
+  },
 };
 </script>
 <style lang="scss">
