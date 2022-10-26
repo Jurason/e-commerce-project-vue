@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-      products: null,
+      products: [],
       currentProductForView: null,
       active: {
         productViewer: false,

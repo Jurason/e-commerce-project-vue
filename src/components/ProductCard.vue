@@ -4,8 +4,18 @@
     <div class="description">{{ descriptionHandler }}</div>
     <div class="price">Price: ${{ product.price.toFixed(2) }}</div>
     <div class="footer">
-      <button @click="$emit('product-view', product)">View product</button
-      >&nbsp;<button>Buy</button>
+      <button
+        :disabled="!isAvailable"
+        :class="{ 'opacity-5': !isAvailable }"
+        @click="$emit('product-view', product)"
+      >
+        View product</button
+      >&nbsp;<button
+        :disabled="!isAvailable"
+        :class="{ 'opacity-5': !isAvailable }"
+      >
+        Buy
+      </button>
     </div>
   </div>
 </template>
@@ -19,6 +29,9 @@ export default {
   computed: {
     descriptionHandler() {
       return this.product.description.substring(0, 50);
+    },
+    isAvailable() {
+      return this.product.count;
     },
   },
 };
@@ -36,6 +49,14 @@ export default {
   box-shadow: 0 0 5px grey;
   padding: 10px;
   border-radius: 15px;
+}
+.disabled {
+  &:before {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 }
 .footer {
   display: flex;

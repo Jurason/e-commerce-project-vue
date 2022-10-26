@@ -6,7 +6,16 @@
       <div class="description">{{ product.description }}</div>
       <div class="price">Price: ${{ product.price.toFixed(2) }}</div>
       <div class="footer">
-        <button @click="addToCart">Add to cart</button>&nbsp;
+        <button
+          :disabled="!isAvailableQuantity"
+          :class="{
+            'opacity-5': !isAvailableQuantity,
+            'cursor-default': !isAvailableQuantity,
+          }"
+          @click="addToCart"
+        >
+          Add to cart</button
+        >&nbsp;
         <input
           v-model="quantityInput"
           class="quantity-input"
@@ -37,10 +46,13 @@ export default {
     document.addEventListener("keydown", this.handleKeydown);
   },
   beforeUnmount() {
-    document.removeEventListener(this.handleKeydown);
+    document.removeEventListener("keydown", this.handleKeydown);
   },
   computed: {
     ...getters,
+    isAvailableQuantity() {
+      return this.product.count >= this.quantityInput;
+    },
   },
   methods: {
     ...mutations,
@@ -48,9 +60,14 @@ export default {
       if (this.isOpen && e.key === "Escape") {
         this.$emit("close");
       }
+      if (this.quantityInput && e.key === "Enter") {
+        this.updateStoreState();
+        this.$emit("close");
+      }
     },
     addToCart() {
       this.updateStoreState();
+      this.quantityInput = null;
     },
     updateStoreState() {
       if (!this.quantityInput) {
@@ -100,17 +117,26 @@ export default {
     padding: 0;
     margin: auto;
   }
-  .close-sign:hover {
-    opacity: 0.8;
-  }
   .quantity-input {
     max-width: 100px;
     padding: 5px;
     outline: none;
   }
+  .close-sign:hover {
+    opacity: 0.5;
+  }
   .quantity {
     font-size: 14px;
     color: grey;
   }
+}
+.background-red {
+  background-color: indianred;
+}
+.opacity-5 {
+  opacity: 0.5;
+}
+.cursor-default {
+  cursor: default;
 }
 </style>
