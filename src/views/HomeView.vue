@@ -2,46 +2,77 @@
   <div class="product-list">
     <ProductCard
       @product-view="productView($event)"
-      v-for="product of products"
+      @quick-buy="productQuickBuy($event)"
+      v-for="product of getProducts"
       :key="product.id"
       :product="product"
     />
   </div>
   <ViewProductCard
-    :is-open="active.productViewer"
+    :isOpen="active.productViewer"
     :product="currentProductForView"
     @close="active.productViewer = false"
+  />
+  <ViewProductCard
+    :isOpen="active.quickBuy"
+    :product="currentProductForView"
+    @close="active.quickBuy = false"
+  >
+    <template v-slot:checkout>
+      <CheckoutCard @checkout="active.confirmationModal = true" />
+    </template>
+  </ViewProductCard>
+  <ConfirmationModal
+    :isOpen="active.confirmationModal"
+    @close="active.confirmationModal = false"
+    @confirm="orderConfirmed($event)"
   />
 </template>
 
 <script>
 import ProductCard from "../components/ProductCard.vue";
 import ViewProductCard from "../components/ViewProductCard";
-import { getters } from "../assets/my-store/index";
+import CheckoutCard from "../components/CheckoutCard";
+import ConfirmationModal from "../components/ConfirmationModal";
+import { getters, mutations } from "../assets/my-store/index";
 
 export default {
   name: "HomeView",
   components: {
     ProductCard,
     ViewProductCard,
-  },
-  mounted() {
-    this.products = this.getProducts();
+    CheckoutCard,
+    ConfirmationModal,
   },
   data() {
     return {
-      products: [],
       currentProductForView: null,
       active: {
         productViewer: false,
+        quickBuy: false,
+        confirmationModal: false,
       },
     };
   },
+  computed: { ...getters },
   methods: {
-    ...getters,
+    ...mutations,
     productView(product) {
       this.currentProductForView = product;
       this.active.productViewer = true;
+    },
+    productQuickBuy(product) {
+      this.currentProductForView = product;
+      this.active.quickBuy = true;
+    },
+    orderConfirmed(e) {
+      console.log("Order Confirmed from HomeView!");
+      this.active.confirmationModal = false;
+      this.active.quickBuy = false;
+      this.removeOrderedItemsFromStore();
+      if (!e.saveCartState) {
+        this.emptyCart();
+      }
     },
   },
 };

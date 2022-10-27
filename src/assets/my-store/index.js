@@ -84,34 +84,44 @@ export const getters = {
   },
 };
 export const mutations = {
+  getProductFromStore: (product) => {
+    return findProductInStore(product);
+  },
   addProductToCart: (item, count) => {
     const itemToCart = JSON.parse(JSON.stringify(item));
     itemToCart.count = parseInt(count);
-    if (!store.cart.find((t) => t.id === itemToCart.id)) {
+    if (!findProductInCart(itemToCart)) {
       store.cart.push(itemToCart);
     } else {
-      const alreadyAdded = store.cart.find((t) => t.id === itemToCart.id);
+      const alreadyAdded = findProductInCart(itemToCart);
       alreadyAdded.count += itemToCart.count;
     }
   },
-  updateProductQuantityInCart: (id, newCount) => {
-    if (!store.cart.find((t) => t.id === id)) {
+  updateProductQuantityInCart: (product, newCount) => {
+    if (!findProductInCart(product)) {
       return;
     }
-    store.cart.find((t) => t.id === id).count = newCount;
+    const currentProduct = findProductInCart(product);
+    currentProduct.count = newCount;
   },
   removeProductFromCart(item) {
     const index = store.cart.findIndex((el) => el.id === item.id);
     store.cart.splice(index, 1);
-    console.log("store.cart:", store.cart);
   },
   removeOrderedItemsFromStore: () => {
     store.cart.forEach((item) => {
-      store.state.find((t) => t.id === item.id).count -= item.count;
+      const currentProduct = findProductInStore(item);
+      currentProduct.count -= item.count;
     });
   },
   emptyCart: () => {
     store.cart = [];
-    console.log("store.cart:", store.cart);
   },
 };
+
+function findProductInStore(product) {
+  return store.state.find((t) => t.id === product.id);
+}
+function findProductInCart(product) {
+  return store.cart.find((t) => t.id === product.id);
+}
