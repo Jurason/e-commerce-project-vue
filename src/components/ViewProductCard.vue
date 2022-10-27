@@ -1,30 +1,35 @@
 <template>
   <div class="viewer-background" v-if="isOpen">
-    <div class="product">
-      <div class="close-sign" @click="$emit('close', null)">X</div>
-      <h2 class="title">{{ product.title }}</h2>
-      <div class="description">{{ product.description }}</div>
-      <div class="price">Price: ${{ product.price.toFixed(2) }}</div>
-      <div class="footer">
-        <button
-          :disabled="!isAvailableQuantity"
-          :class="{
-            'opacity-5': !isAvailableQuantity,
-            'cursor-default': !isAvailableQuantity,
-          }"
-          @click="addToCart"
-        >
-          Add to cart</button
-        >&nbsp;
-        <input
-          v-model="quantityInput"
-          class="quantity-input"
-          type="text"
-          placeholder="Enter quantity"
-        />&nbsp;
-        <div class="quantity">
-          stock balance {{ maxQuantityForCurrentProduct }}
+    <div class="wrapper-product">
+      <div class="product">
+        <div class="close-sign" @click="$emit('close', null)">X</div>
+        <h2 class="title">{{ product.title }}</h2>
+        <div class="description">{{ product.description }}</div>
+        <div class="price">Price: ${{ product.price.toFixed(2) }}</div>
+        <div class="footer">
+          <button
+            :disabled="!isAvailableQuantity"
+            :class="{
+              'opacity-5': !isAvailableQuantity,
+              'cursor-default': !isAvailableQuantity,
+            }"
+            @click="addToCart"
+          >
+            Add to cart</button
+          >&nbsp;
+          <input
+            v-model="quantityInput"
+            class="quantity-input"
+            type="text"
+            placeholder="Enter quantity"
+          />&nbsp;
+          <div class="quantity">
+            stock balance {{ maxQuantityForCurrentProduct }}
+          </div>
         </div>
+      </div>
+      <div class="checkout-block">
+        <slot name="checkout"></slot>
       </div>
     </div>
   </div>
@@ -55,7 +60,14 @@ export default {
   computed: {
     ...getters,
     isAvailableQuantity() {
-      return this.product.count >= this.quantityInput;
+      console.log(
+        "this.maxQuantityForCurrentProduct:",
+        this.maxQuantityForCurrentProduct
+      );
+      return (
+        this.maxQuantityForCurrentProduct >= this.quantityInput &&
+        this.maxQuantityForCurrentProduct
+      );
     },
   },
   methods: {
@@ -71,7 +83,6 @@ export default {
     },
     addToCart() {
       this.updateCartState();
-      this.$emit("close");
       this.quantityInput = null;
     },
     updateCartState() {
@@ -80,13 +91,20 @@ export default {
       }
       this.addProductToCart(this.product, this.quantityInput);
     },
-  },
-  watch: {
-    isOpen() {
+    updateCurrentQuantity() {
       this.currentProductQuantityInCart =
         this.getCartProducts.find((t) => t.id === this.product.id)?.count || 0;
       this.maxQuantityForCurrentProduct =
         this.product.count - this.currentProductQuantityInCart;
+    },
+  },
+  watch: {
+    isOpen() {
+      this.quantityInput = null;
+      this.updateCurrentQuantity();
+    },
+    quantityInput() {
+      this.updateCurrentQuantity();
     },
   },
 };
@@ -101,16 +119,20 @@ export default {
   position: fixed;
   top: 0;
 }
-.product {
-  top: 30%;
-  padding: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+.wrapper-product {
   position: fixed;
+  transform: translateX(-50%);
+  top: 30%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.product {
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 101;
   background-color: whitesmoke;
   border-radius: 10px;
   .close-sign {

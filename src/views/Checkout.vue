@@ -3,43 +3,63 @@
   <div class="checkout">
     <div class="items-list">
       <ProductInCart
-        @input-changed="test"
+        @change-quantity="changeQuantity($event)"
         v-for="product of productsInCart"
         :product="product"
         :key="product.id"
       />
     </div>
-    <CheckoutCard :update="updateKey" />
+    <CheckoutCard @checkout="active.confirmationModal = true" />
+    <ConfirmationModal
+      :isOpen="active.confirmationModal"
+      @close="active.confirmationModal = false"
+      @confirm="orderConfirmed"
+    />
   </div>
 </template>
 <script>
 import ProductInCart from "../components/ProductInCart";
 import CheckoutCard from "../components/CheckoutCard";
-import { getters } from "../assets/my-store/index";
+import ConfirmationModal from "../components/ConfirmationModal";
+import { getters, mutations } from "../assets/my-store/index";
 
 export default {
   name: "Checkout-page",
   components: {
     ProductInCart,
     CheckoutCard,
+    ConfirmationModal,
   },
   mounted() {
+    this.productsInCart = this.getCartProducts;
+  },
+  updated() {
     this.productsInCart = this.getCartProducts;
   },
   data() {
     return {
       productsInCart: [],
-      //костыль, хотя тут весь код один сплошной костыль
-      updateKey: 0,
+      active: {
+        confirmationModal: false,
+      },
     };
   },
   computed: {
     ...getters,
   },
   methods: {
-    test() {
+    ...mutations,
+    changeQuantity(e) {
       console.log("Input Changed!");
-      this.updateKey++;
+      console.log("e:", e);
+      this.updateProductQuantityInCart(e.productId, e.newValue);
+      console.log("this.getCartProducts:", this.getCartProducts);
+    },
+    orderConfirmed() {
+      console.log("Order Confirmed from Checkout View!");
+      this.active.confirmationModal = false;
+      this.removeOrderedItemsFromStore();
+      this.emptyCart();
     },
   },
 };

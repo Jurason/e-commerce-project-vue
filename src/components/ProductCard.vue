@@ -11,10 +11,11 @@
       >
         View product</button
       >&nbsp;<button
+        @click="$emit('quick-buy', product)"
         :disabled="!isAvailable"
         :class="{ 'opacity-5': !isAvailable }"
       >
-        Buy
+        Quick Buy
       </button>
     </div>
   </div>
@@ -25,6 +26,10 @@ export default {
   name: "ProductCard",
   props: {
     product: Object,
+  },
+  emits: {
+    "product-view": Object,
+    "quick-buy": Object,
   },
   computed: {
     descriptionHandler() {
