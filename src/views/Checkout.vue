@@ -3,8 +3,7 @@
   <div class="checkout">
     <div class="items-list">
       <ProductInCart
-        @change-quantity="changeQuantity($event)"
-        v-for="product of getCartProducts"
+        v-for="product of productsInCartList"
         :product="product"
         :key="product.id"
       />
@@ -21,7 +20,6 @@
 import ProductInCart from "../components/ProductInCart";
 import CheckoutCard from "../components/CheckoutCard";
 import ConfirmationModal from "../components/ConfirmationModal";
-import { getters, mutations } from "../assets/my-store/index";
 
 export default {
   name: "Checkout-page",
@@ -39,19 +37,17 @@ export default {
     };
   },
   computed: {
-    ...getters,
+		productsInCartList(){
+			return this.$root.$data.getCartProducts()
+		},
   },
   methods: {
-    ...mutations,
-    changeQuantity(e) {
-      this.updateProductQuantityInCart(e.product, e.newValue);
-    },
     orderConfirmed(e) {
       console.log("Order Confirmed from Checkout View!");
       this.active.confirmationModal = false;
-      this.removeOrderedItemsFromStore();
+      this.$root.$data.removeOrderedItemsFromStore();
       if (!e.saveCartState) {
-        this.emptyCart();
+        this.$root.$data.emptyCart();
       }
     },
   },

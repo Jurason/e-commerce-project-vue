@@ -7,18 +7,18 @@
       <div @click="removeProduct" class="delete-icon">X</div>
       <div class="title">{{ product.title }}</div>
       <div class="description">{{ product.description }}</div>
-      <div class="quantity">
-        Quantity:
-        <button @click="counter--" class="remove-item" :disabled="!moreThenOne">
-          -
-        </button>
-        <input type="text" v-model="counter" /><button
+      <div class="quantity">Quantity:
+				<button
+						@click="removeOne"
+						class="remove-item"
+						:disabled="!moreThenOne"
+				>-</button>
+        <input type="text" v-model="counter" />
+				<button
           :disabled="!availableQuantity"
-          @click="counter++"
+          @click="addOne"
           class="add-item"
-        >
-          +
-        </button>
+        >+</button>
       </div>
       <div class="price">${{ product.price }}</div>
     </div>
@@ -26,17 +26,15 @@
 </template>
 
 <script>
-import { getters, mutations } from "../assets/my-store/index";
 
 export default {
   name: "ProductInCart",
   props: {
     product: Object,
   },
-  emits: { "change-quantity": Object },
   mounted() {
-    this.counter = this.product.count;
-    this.getMaxQuantity();
+    this.counter = this.product.stock;
+		this.maxQuantity = this.getMaxQuantity
   },
   data() {
     return {
@@ -45,7 +43,9 @@ export default {
     };
   },
   computed: {
-    ...getters,
+		getMaxQuantity() {
+			return this.$root.$data.getProductFromStore(this.product).stock;
+		},
     availableQuantity() {
       return this.counter < this.maxQuantity;
     },
@@ -54,13 +54,17 @@ export default {
     },
   },
   methods: {
-    ...mutations,
-    getMaxQuantity() {
-      this.maxQuantity = this.getProductFromStore(this.product).count;
-    },
-    removeProduct() {
-      this.removeProductFromCart(this.product);
-    },
+		removeProduct() {
+			this.$root.$data.removeProductFromCart(this.product)
+		},
+		addOne(){
+			this.counter++
+			this.$root.$data.updateProductToCart(this.product, 1)
+		},
+		removeOne(){
+			this.counter--
+			this.$root.$data.updateProductToCart(this.product, -1)
+		}
   },
   watch: {
     counter() {
@@ -73,7 +77,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 .wrapper {
   width: 100%;

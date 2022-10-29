@@ -1,9 +1,9 @@
 <template>
   <div class="product-list">
-    <ProductCard
+		<ProductCard
       @product-view="productView($event)"
       @quick-buy="productQuickBuy($event)"
-      v-for="product of getProducts"
+      v-for="product of productList"
       :key="product.id"
       :product="product"
     />
@@ -34,7 +34,6 @@ import ProductCard from "../components/ProductCard.vue";
 import ViewProductCard from "../components/ViewProductCard";
 import CheckoutCard from "../components/CheckoutCard";
 import ConfirmationModal from "../components/ConfirmationModal";
-import { getters, mutations } from "../assets/my-store/index";
 
 export default {
   name: "HomeView",
@@ -54,9 +53,12 @@ export default {
       },
     };
   },
-  computed: { ...getters },
+  computed: {
+		productList(){
+			return this.$root.$data.getProducts()
+		}
+	},
   methods: {
-    ...mutations,
     productView(product) {
       this.currentProductForView = product;
       this.active.productViewer = true;
@@ -69,10 +71,10 @@ export default {
       console.log("Order Confirmed from HomeView!");
       this.active.confirmationModal = false;
       this.active.quickBuy = false;
-      this.removeOrderedItemsFromStore();
-      if (!e.saveCartState) {
-        this.emptyCart();
-      }
+			this.$root.$data.removeOrderedItemsFromStore();
+			if (!e.saveCartState) {
+				this.$root.$data.emptyCart();
+			}
     },
   },
 };

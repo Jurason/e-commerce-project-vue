@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import { getters, mutations } from "../assets/my-store/index";
 
 export default {
   name: "ViewProductCard",
@@ -44,7 +43,6 @@ export default {
     return {
       quantityInput: null,
       maxQuantityForCurrentProduct: null,
-      currentProductQuantityInCart: 0,
     };
   },
   props: {
@@ -58,16 +56,16 @@ export default {
     document.removeEventListener("keydown", this.handleKeydown);
   },
   computed: {
-    ...getters,
     isAvailableQuantity() {
       return (
-        this.maxQuantityForCurrentProduct >= this.quantityInput &&
-        this.maxQuantityForCurrentProduct
+        this.maxQuantityForCurrentProduct >= this.quantityInput && this.maxQuantityForCurrentProduct
       );
     },
+		getProductQuantityInCart() {
+			return this.$root.$data.getProductFromCart(this.product)?.stock || 0
+		}
   },
   methods: {
-    ...mutations,
     handleKeydown(e) {
       if (this.isOpen && e.key === "Escape") {
         this.$emit("close");
@@ -85,13 +83,10 @@ export default {
       if (!this.quantityInput) {
         return;
       }
-      this.addProductToCart(this.product, this.quantityInput);
+			this.$root.$data.updateProductToCart(this.product, this.quantityInput)
     },
     updateCurrentQuantity() {
-      this.currentProductQuantityInCart =
-        this.getCartProducts.find((t) => t.id === this.product.id)?.count || 0;
-      this.maxQuantityForCurrentProduct =
-        this.product.count - this.currentProductQuantityInCart;
+			this.maxQuantityForCurrentProduct = this.product.stock - this.getProductQuantityInCart;
     },
   },
   watch: {
@@ -117,6 +112,7 @@ export default {
 }
 .wrapper-product {
   position: fixed;
+	min-width: 40vw;
   transform: translateX(-50%);
   top: 30%;
   left: 50%;

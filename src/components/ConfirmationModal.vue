@@ -39,6 +39,11 @@ export default {
       saveCartState: false,
     };
   },
+	watch: {
+		isOpen(){
+			this.saveCartState = false
+		}
+	}
 };
 </script>
 

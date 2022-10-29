@@ -4,9 +4,9 @@
       <p class="title">ORDER SUMMARY</p>
     </div>
     <div class="body">
-      <p class="text-box">Subtotal: ${{ getCartTotal.subTotal.toFixed(2) }}</p>
+      <p class="text-box">Subtotal: ${{ getSubTotal.toFixed(2) }}</p>
       <p class="text-box">Shipping: {{ $options.SHIPPING_FEE }}</p>
-      <p class="text-total">Total ${{ getCartTotal.total.toFixed(2) }}</p>
+      <p class="text-total">Total ${{ getTotal.toFixed(2) }}</p>
     </div>
     <div class="footer">
       <div @click="$emit('checkout', null)" class="checkout-button">
@@ -17,15 +17,20 @@
 </template>
 
 <script>
-import { getters, SHIPPING_FEE } from "../assets/my-store/index";
+import { SHIPPING_FEE } from "../App";
 
 export default {
+	SHIPPING_FEE: SHIPPING_FEE,
   name: "CheckoutCard",
   emits: { checkout: null },
-  SHIPPING_FEE: SHIPPING_FEE,
-  computed: {
-    ...getters,
-  },
+	computed: {
+		getTotal(){
+			return this.$root.$data.getCartTotal().total
+		},
+		getSubTotal(){
+			return this.$root.$data.getCartTotal().subTotal
+		}
+	},
 };
 </script>
 

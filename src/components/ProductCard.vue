@@ -33,10 +33,10 @@ export default {
   },
   computed: {
     descriptionHandler() {
-      return this.product.description.substring(0, 50);
+      return this.product.description.substring(0, 100);
     },
     isAvailable() {
-      return this.product.count;
+      return this.product.stock;
     },
   },
 };
