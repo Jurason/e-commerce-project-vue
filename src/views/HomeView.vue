@@ -1,17 +1,10 @@
 <template>
 	<div class="wrapper-products-list">
 		<div class="filter-block">
-			Filter: <input
-				v-model="filter.input"
-				type="text">
-			<div class="filter-option">
-				<input @click="filter.byPrice = !filter.byPrice" type="checkbox"> by price <br>
-				<input @click="filter.byName = !filter.byName" type="checkbox"> by name <br>
-				<input @click="filter.byStockBalance = !filter.byStockBalance" type="checkbox"> by stock balance
-			</div>
+			<FilterOptions @filter="filterHandler($event)"/>
 		</div>
 		<div class="product-list">
-			<ProductCardList :filter="filter">
+			<ProductCardList :filterOptions="filterOptions">
 				<template #product="slotProp">
 					<ProductCard
 							@product-view="productView($event)"
@@ -44,29 +37,26 @@
 </template>
 
 <script>
-import ProductCardList from "../components/ProductCardList";
+import ProductCardsList from "../components/ProductCardsList";
 import ProductCard from "../components/ProductCard.vue";
 import ViewProductCard from "../components/ViewProductCard";
 import CheckoutCard from "../components/CheckoutCard";
 import ConfirmationModal from "../components/ConfirmationModal";
+import FilterOptions from "../components/FilterOptions";
 
 export default {
   name: "HomeView",
   components: {
-		ProductCardList,
+		ProductCardList: ProductCardsList,
     ProductCard,
     ViewProductCard,
     CheckoutCard,
     ConfirmationModal,
+		FilterOptions
   },
   data() {
     return {
-			filter: {
-				input: '',
-				byPrice: false,
-				byName: false,
-				byStockBalance: false
-			},
+			filterOptions: {},
       currentProductForView: null,
       active: {
         productViewer: false,
@@ -77,6 +67,9 @@ export default {
   },
   computed: {},
   methods: {
+		filterHandler(filterOptions){
+			this.filterOptions = filterOptions
+		},
     productView(product) {
       this.currentProductForView = product;
       this.active.productViewer = true;

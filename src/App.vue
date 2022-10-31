@@ -1,7 +1,7 @@
 //TODO
 // [ ] Один компонент для продуктовой карточки со слотом под добавление/удаления из корзины
 // [ ] Transition Group
-// [ ]
+// [x] Рефакторинг компонента корзины CartList
 
 <template>
   <nav style="text-align: left; width: 80%; margin: auto">
