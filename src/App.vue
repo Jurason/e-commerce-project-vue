@@ -1,5 +1,10 @@
+//TODO
+// [ ] Один компонент для продуктовой карточки со слотом под добавление/удаления из корзины
+// [ ] Transition Group
+// [ ]
+
 <template>
-  <nav>
+  <nav style="text-align: left; width: 80%; margin: auto">
     <router-link to="/">Home</router-link> |
     <router-link to="/checkout">Checkout</router-link>
   </nav>
@@ -16,10 +21,7 @@ export default {
   name: "App",
 	async mounted() {
 		await loadData().then(data => this.store = data.products)
-		const cartProducts = localStorage.getItem('cart-products')
-		if(cartProducts){
-			this.cart = JSON.parse(cartProducts)
-		}
+		this.getFromLocalStorage()
 	},
 	data() {
     return {
@@ -34,7 +36,10 @@ export default {
 					currentProduct.stock -= product.stock;
 				});
 			},
-			emptyCart: () => this.cart = [],
+			emptyCart: () => {
+				this.cart = []
+				this.setToLocalStorage()
+			},
 			getProductFromCart: (product) => {
 				return this.findProductInCart(product)
 			},
@@ -47,16 +52,17 @@ export default {
 					const alreadyAdded = this.findProductInCart(itemToCart);
 					alreadyAdded.stock += itemToCart.stock;
 				}
-				localStorage.setItem('cart-products', JSON.stringify(this.cart))
+				this.setToLocalStorage()
 			},
 			getCartTotal: () => {
 				const subTotal = this.cart.reduce((acc, el) => acc + el.price * el.stock,0);
 				const total = subTotal * (1 + SHIPPING_RATE);
 				return { subTotal: subTotal, total: total };
 			},
-			removeProductFromCart(item) {
+			removeProductFromCart: (item) => {
 				const index = this.cart.findIndex((el) => el.id === item.id);
 				this.cart.splice(index, 1);
+				this.setToLocalStorage()
 			},
     };
   },
@@ -67,11 +73,18 @@ export default {
 		findProductInStore(product) {
 			return this.store.find((t) => t.id === product.id);
 		},
+		setToLocalStorage(){
+			localStorage.setItem('cart-products', JSON.stringify(this.cart))
+		},
+		getFromLocalStorage(){
+			const cartProducts = localStorage.getItem('cart-products')
+			if(cartProducts){
+				this.cart = JSON.parse(cartProducts)
+			}
+		}
 	},
-	computed: {
-	},
-	watch: {
-	}
+	computed: {},
+	watch: {}
 };
 </script>
 

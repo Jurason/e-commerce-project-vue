@@ -46,7 +46,8 @@ export default {
 <style lang="scss">
 .product-card {
   display: flex;
-  max-width: 25%;
+	justify-content: space-between;
+	min-height: 100%;
   flex-direction: column;
   gap: 10px;
   align-items: center;
@@ -66,6 +67,7 @@ export default {
 .footer {
   display: flex;
   justify-content: center;
+	gap: 10px;
   align-items: flex-end;
   button {
     padding: 10px;

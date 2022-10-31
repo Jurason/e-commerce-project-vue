@@ -9,7 +9,7 @@
       <p class="text-total">Total ${{ getTotal.toFixed(2) }}</p>
     </div>
     <div class="footer">
-      <div @click="$emit('checkout', null)" class="checkout-button">
+      <div :class="{'disabled-button' : isCartEmpty}" @click="checkout" class="checkout-button">
         Checkout
       </div>
     </div>
@@ -29,8 +29,19 @@ export default {
 		},
 		getSubTotal(){
 			return this.$root.$data.getCartTotal().subTotal
+		},
+		isCartEmpty(){
+			return !this.$root.$data.cart.length
 		}
 	},
+	methods: {
+		checkout(){
+			if(this.isCartEmpty){
+				return
+			}
+			this.$emit('checkout', null)
+		}
+	}
 };
 </script>
 
@@ -61,5 +72,9 @@ export default {
     width: 100%;
     border: 1px solid black;
   }
+	.disabled-button{
+		background-color: rgb(159, 62, 62);
+	}
 }
+
 </style>

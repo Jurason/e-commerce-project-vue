@@ -1,13 +1,27 @@
 <template>
-  <div class="product-list">
-		<ProductCard
-      @product-view="productView($event)"
-      @quick-buy="productQuickBuy($event)"
-      v-for="product of productList"
-      :key="product.id"
-      :product="product"
-    />
-  </div>
+	<div class="wrapper-products-list">
+		<div class="filter-block">
+			Filter: <input
+				v-model="filter.input"
+				type="text">
+			<div class="filter-option">
+				<input @click="filter.byPrice = !filter.byPrice" type="checkbox"> by price <br>
+				<input @click="filter.byName = !filter.byName" type="checkbox"> by name <br>
+				<input @click="filter.byStockBalance = !filter.byStockBalance" type="checkbox"> by stock balance
+			</div>
+		</div>
+		<div class="product-list">
+			<ProductCardList :filter="filter">
+				<template #product="slotProp">
+					<ProductCard
+							@product-view="productView($event)"
+							@quick-buy="productQuickBuy($event)"
+							:product="slotProp.product"
+					/>
+				</template>
+			</ProductCardList>
+		</div>
+	</div>
   <ViewProductCard
     :isOpen="active.productViewer"
     :product="currentProductForView"
@@ -30,6 +44,7 @@
 </template>
 
 <script>
+import ProductCardList from "../components/ProductCardList";
 import ProductCard from "../components/ProductCard.vue";
 import ViewProductCard from "../components/ViewProductCard";
 import CheckoutCard from "../components/CheckoutCard";
@@ -38,6 +53,7 @@ import ConfirmationModal from "../components/ConfirmationModal";
 export default {
   name: "HomeView",
   components: {
+		ProductCardList,
     ProductCard,
     ViewProductCard,
     CheckoutCard,
@@ -45,6 +61,12 @@ export default {
   },
   data() {
     return {
+			filter: {
+				input: '',
+				byPrice: false,
+				byName: false,
+				byStockBalance: false
+			},
       currentProductForView: null,
       active: {
         productViewer: false,
@@ -53,11 +75,7 @@ export default {
       },
     };
   },
-  computed: {
-		productList(){
-			return this.$root.$data.store
-		}
-	},
+  computed: {},
   methods: {
     productView(product) {
       this.currentProductForView = product;
@@ -80,12 +98,25 @@ export default {
 };
 </script>
 <style>
+.wrapper-products-list{
+	max-width: 80%;
+	margin: auto;
+	display: flex;
+}
 .product-list {
+	width: 100%;
   display: flex;
-  max-width: 80%;
-  margin: auto;
   justify-content: center;
   gap: 25px;
   flex-wrap: wrap;
+}
+.filter-block {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	text-align: left;
+}
+.outline-red{
+	outline-color: red;
 }
 </style>
