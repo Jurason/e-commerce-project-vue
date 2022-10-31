@@ -38,7 +38,7 @@ export default {
   },
   computed: {
 		productsInCartList(){
-			return this.$root.$data.getCartProducts()
+			return this.$root.$data.cart
 		},
   },
   methods: {

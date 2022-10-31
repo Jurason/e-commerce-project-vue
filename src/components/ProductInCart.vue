@@ -59,11 +59,11 @@ export default {
 		},
 		addOne(){
 			this.counter++
-			this.$root.$data.updateProductToCart(this.product, 1)
+			this.$root.$data.updateProductInCart(this.product, 1)
 		},
 		removeOne(){
 			this.counter--
-			this.$root.$data.updateProductToCart(this.product, -1)
+			this.$root.$data.updateProductInCart(this.product, -1)
 		}
   },
   watch: {

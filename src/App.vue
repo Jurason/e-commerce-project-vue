@@ -16,12 +16,15 @@ export default {
   name: "App",
 	async mounted() {
 		await loadData().then(data => this.store = data.products)
+		const cartProducts = localStorage.getItem('cart-products')
+		if(cartProducts){
+			this.cart = JSON.parse(cartProducts)
+		}
 	},
-  data() {
+	data() {
     return {
       store: [],
 			cart: [],
-			getProducts: () => this.store,
 			getProductFromStore: (product) => {
 				return this.findProductInStore(product)
 			},
@@ -32,11 +35,10 @@ export default {
 				});
 			},
 			emptyCart: () => this.cart = [],
-			getCartProducts: () => this.cart,
 			getProductFromCart: (product) => {
 				return this.findProductInCart(product)
 			},
-			updateProductToCart: (item, quantity) => {
+			updateProductInCart: (item, quantity) => {
 				const itemToCart = JSON.parse(JSON.stringify(item));
 				itemToCart.stock = parseInt(quantity);
 				if (!this.findProductInCart(itemToCart)) {
@@ -45,6 +47,7 @@ export default {
 					const alreadyAdded = this.findProductInCart(itemToCart);
 					alreadyAdded.stock += itemToCart.stock;
 				}
+				localStorage.setItem('cart-products', JSON.stringify(this.cart))
 			},
 			getCartTotal: () => {
 				const subTotal = this.cart.reduce((acc, el) => acc + el.price * el.stock,0);
@@ -66,16 +69,8 @@ export default {
 		},
 	},
 	computed: {
-		test(){
-			console.log('root computed')
-			this.getCartTotal()
-			return false
-		}
 	},
 	watch: {
-		test(){
-			console.log('something was changed in root element!')
-		}
 	}
 };
 </script>

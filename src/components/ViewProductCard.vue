@@ -22,6 +22,7 @@
             class="quantity-input"
             type="text"
             placeholder="Enter quantity"
+						ref="input"
           />&nbsp;
           <div class="quantity">
             stock balance {{ maxQuantityForCurrentProduct }}
@@ -83,14 +84,14 @@ export default {
       if (!this.quantityInput) {
         return;
       }
-			this.$root.$data.updateProductToCart(this.product, this.quantityInput)
+			this.$root.$data.updateProductInCart(this.product, this.quantityInput)
     },
     updateCurrentQuantity() {
 			this.maxQuantityForCurrentProduct = this.product.stock - this.getProductQuantityInCart;
     },
   },
   watch: {
-    isOpen() {
+    async isOpen() {
       this.quantityInput = null;
       this.updateCurrentQuantity();
     },

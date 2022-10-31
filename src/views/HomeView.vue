@@ -55,7 +55,7 @@ export default {
   },
   computed: {
 		productList(){
-			return this.$root.$data.getProducts()
+			return this.$root.$data.store
 		}
 	},
   methods: {
