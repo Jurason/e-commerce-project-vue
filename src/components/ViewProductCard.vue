@@ -1,5 +1,6 @@
 <template>
-  <div class="viewer-background" v-if="isOpen">
+	<transition appear name="fade">
+	<div class="viewer-background" v-if="isOpen">
     <div class="wrapper-product">
       <div class="product">
         <div class="close-sign" @click="$emit('close', null)">X</div>
@@ -34,6 +35,7 @@
       </div>
     </div>
   </div>
+	</transition>
 </template>
 
 <script>
@@ -103,6 +105,16 @@ export default {
 </script>
 
 <style lang="scss">
+
+//******	transition css	******//
+.fade-enter-active, .fade-leave-active {
+	transition: opacity .4s;
+}
+.fade-enter, .fade-leave-to {
+	opacity: 0;
+}
+//******	transition css	******//
+
 .viewer-background {
   height: 100vh;
   width: 100%;

@@ -1,5 +1,4 @@
 <template>
-	<div v-if="noMatchesFound">No results!</div>
 	<div class="item" v-for="item in filteredItems" :key="item.id">
 		<slot name="product" :product="item"></slot>
 	</div>
@@ -13,16 +12,16 @@ export default {
 	},
 	computed: {
 		filteredItems(){
-			if(!this.filter.input && Object.keys(this.filter).every(key => this.filter[key] === false)){
+			if(!this.filterOptions.input && Object.keys(this.filterOptions).every(key => this.filterOptions[key] === false)){
 				return this.$root.$data.store
 			}
 			const filteredProducts = this.$root.$data.store.filter(item => {
-				return item.title.toUpperCase().includes(this.filter.input.toUpperCase())
+				return item.title.toUpperCase().includes(this.filterOptions.input.toUpperCase())
 			})
-			if(this.filter.byPrice){
+			if(this.filterOptions.byPrice){
 				filteredProducts.sort((a, b) => a.price - b.price)
 			}
-			if(this.filter.byName) {
+			if(this.filterOptions.byName) {
 				filteredProducts.sort((a, b) => {
 					const nameA = a.title.toUpperCase()
 					const nameB = b.title.toUpperCase()
@@ -34,15 +33,12 @@ export default {
 					}
 				})
 			}
-			if(this.filter.byStockBalance){
+			if(this.filterOptions.byStockBalance){
 				filteredProducts.sort((a, b) => b.stock - a.stock)
 			}
 			return filteredProducts
 		},
-		noMatchesFound(){
-			return !this.filteredItems.length
-		}
-	}
+	},
 }
 </script>
 
