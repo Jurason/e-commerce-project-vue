@@ -1,10 +1,18 @@
 <template>
-	<div class="item" v-for="item in filteredItems" :key="item.id">
-		<slot name="product" :product="item"></slot>
-	</div>
+	<transition-group
+			name="list"
+			@before-enter="onBeforeEnter"
+			@enter="onEnter"
+	>
+		<div class="item" v-for="(item, index) in filteredItems" :key="item.id" :data-index="index">
+			<slot name="product" :product="item"></slot>
+		</div>
+	</transition-group>
 </template>
 
 <script>
+import gsap from 'gsap'
+
 export default {
 	name: "ProductCardList",
 	props: {
@@ -39,10 +47,25 @@ export default {
 			return filteredProducts
 		},
 	},
+	methods: {
+		onBeforeEnter(el) {
+			el.style.opacity = 0
+		},
+		onEnter(el, done) {
+			gsap.to(el, {
+				opacity: 1,
+				delay: el.dataset.index * 0.1,
+				onComplete: done
+			})
+		},
+	}
 }
 </script>
 
 <style scoped>
+.list-move {
+	transition: transform 1s;
+}
 .item {
 	width: 25%;
 }

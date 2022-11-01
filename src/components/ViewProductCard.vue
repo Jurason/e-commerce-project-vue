@@ -1,5 +1,5 @@
 <template>
-	<transition appear name="fade">
+	<transition name="view-product">
 	<div class="viewer-background" v-if="isOpen">
     <div class="wrapper-product">
       <div class="product">
@@ -107,10 +107,10 @@ export default {
 <style lang="scss">
 
 //******	transition css	******//
-.fade-enter-active, .fade-leave-active {
+.view-product-enter-active, .view-product-leave-active {
 	transition: opacity .4s;
 }
-.fade-enter, .fade-leave-to {
+.view-product-enter-from, .view-product-leave-to {
 	opacity: 0;
 }
 //******	transition css	******//

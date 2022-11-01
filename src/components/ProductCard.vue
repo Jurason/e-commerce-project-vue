@@ -1,6 +1,6 @@
 <template>
   <div class="product-card">
-    <h2>{{ product.title }}</h2>
+    <h3>{{ product.title }}</h3>
     <div class="description">{{ descriptionHandler }}</div>
     <div class="price">Price: ${{ product.price.toFixed(2) }}</div>
     <div class="footer">
@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     descriptionHandler() {
-      return this.product.description.substring(0, 100);
+      return this.product.description.substring(0, 50);
     },
     isAvailable() {
       return this.product.stock;
@@ -47,7 +47,7 @@ export default {
 .product-card {
   display: flex;
 	justify-content: space-between;
-	min-height: 100%;
+	height: 100%;
   flex-direction: column;
   gap: 10px;
   align-items: center;

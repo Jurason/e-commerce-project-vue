@@ -1,7 +1,7 @@
 <template>
-  <div class="wrapper">
+	<div class="wrapper">
     <div class="left-block">
-      <!--      <img src="" alt="" />-->
+			<img :src="product.images['0']" alt="product" />
     </div>
     <div class="right-block">
       <div @click="removeProduct" class="delete-icon">X</div>
@@ -93,10 +93,10 @@ export default {
   position: relative;
 }
 .left-block {
-  border: 1px solid black;
-  width: 30%;
+  //width: 30%;
   img {
     width: 100%;
+		height: 100%;
   }
 }
 .right-block {
