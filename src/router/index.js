@@ -4,6 +4,19 @@ import HomeView from "../views/HomeView.vue";
 const routes = [
   { path: "/", component: HomeView },
   { path: "/checkout", component: () => import('../views/Checkout') },
+  {
+    path: "/products/:productName",
+    name: 'productCard.show',
+    component: () => import('../views/ProductCardShow'),
+    props: route => ({...route.params}),
+    children: [
+      {
+        path: ":tabName",
+        name: 'productCard.info',
+        // props: route => ({...route.params}),
+      },
+    ]
+  },
 ];
 
 const router = createRouter({

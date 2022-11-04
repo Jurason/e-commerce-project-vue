@@ -1,9 +1,11 @@
 <template>
   <div class="product-card">
-    <h3>{{ product.title }}</h3>
-    <div class="description">{{ descriptionHandler }}</div>
-    <div class="price">Price: ${{ product.price.toFixed(2) }}</div>
-    <div class="footer">
+    <router-link style="text-decoration: none" :to="{name: 'productCard.show', params: {productName: product.title}}">
+			<h3>{{ product.title }}</h3>
+		</router-link>
+			<div class="description">{{ descriptionHandler }}</div>
+			<div class="price">Price: ${{ product.price.toFixed(2) }}</div>
+		<div class="footer">
       <button
         :disabled="!isAvailable"
         :class="{ 'opacity-5': !isAvailable }"
@@ -25,7 +27,7 @@
 export default {
   name: "ProductCard",
   props: {
-    product: Object,
+    product: {type: Object, required: true},
   },
   emits: {
     "product-view": Object,
@@ -55,6 +57,7 @@ export default {
   box-shadow: 0 0 5px grey;
   padding: 10px;
   border-radius: 15px;
+	cursor: pointer;
 }
 .disabled {
   &:before {
