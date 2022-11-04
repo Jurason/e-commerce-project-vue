@@ -3,26 +3,36 @@
 // [ ] Привести в порядок CSS в соответствии с BEM
 // [ ] Сделать страницу товара (по примеру розетки)
 // [ ] Валидацию на инпуты
+// [ ] Валидацию на пропсы и эмитсы
+// [x] Добавить компонент загрузки во время загрузки данных
+// [x] Lazy Load
 // [x] Добавить изображения
 // [x] Transition Group
 // [x] Рефакторинг компонента корзины CartList
+
+// [?] Переписать на Vuex
 
 <template>
   <nav style="text-align: left; width: 80%; margin: auto">
     <router-link to="/">Home</router-link> |
     <router-link to="/checkout">Checkout</router-link>
   </nav>
-  <router-view />
+  <router-view v-if="store.length" />
+	<LoadingBar v-else/>
 </template>
 
 <script>
 import { loadData } from "./api";
+import LoadingBar from "./components/LoadingBar";
 
 const SHIPPING_RATE = 0.05
 export const SHIPPING_FEE = SHIPPING_RATE * 100 + "%"
 
 export default {
   name: "App",
+	components:{
+		LoadingBar
+	},
 	async mounted() {
 		await loadData().then(data => this.store = data.products)
 		this.getFromLocalStorage()
