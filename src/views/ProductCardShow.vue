@@ -5,20 +5,20 @@
 		</div>
 		<div class="product__navbar">
 			<ul class="tabs__list">
-				<li class="tabs__item" :class="{'active': currentTab === 'Overview'}" @click="currentTab = $event.target.textContent">
+				<li class="tabs__item" :class="{'active': currentTab === 'overview'}" @click="activeTab($event.target.textContent.toLowerCase())">
 					<router-link class="tab__link" :to="{name: 'productCard.info', params: {tabName: 'overview'}}">Overview</router-link>
 				</li>
-				<li class="tabs__item" :class="{'active': currentTab === 'Details'}" @click="currentTab = $event.target.textContent">
+				<li class="tabs__item" :class="{'active': currentTab === 'details'}" @click="activeTab($event.target.textContent.toLowerCase())">
 					<router-link class="tab__link" :to="{name: 'productCard.info', params: {tabName: 'details'}}">Details</router-link>
 				</li>
-				<li class="tabs__item" :class="{'active': currentTab === 'Reviews'}" @click="currentTab = $event.target.textContent">
+				<li class="tabs__item" :class="{'active': currentTab === 'reviews'}" @click="activeTab($event.target.textContent.toLowerCase())">
 					<router-link class="tab__link" :to="{name: 'productCard.info', params: {tabName: 'reviews'}}">Reviews</router-link>
 				</li>
 			</ul>
 		</div>
 		<div class="product__main">
 			<keep-alive>
-				<component :is="currentTabComponent"/>
+				<component :product="product" :is="currentTabComponent"/>
 			</keep-alive>
 		</div>
 		<div class="product__related">
@@ -43,17 +43,17 @@ export default {
 	data(){
 		return {
 			product: null,
-			currentTab: 'Overview'
+			currentTab: 'overview'
 		}
 	},
 	computed: {
 		currentTabComponent(){
 			switch (this.currentTab) {
-				case 'Overview':
+				case 'overview':
 					return ProductOverviewComponent
-				case 'Details':
+				case 'details':
 					return ProductDetailsComponent
-				case 'Reviews':
+				case 'reviews':
 					return ProductReviewsComponent
 				default:
 					return ProductOverviewComponent
@@ -61,6 +61,9 @@ export default {
 		},
 	},
 	methods: {
+		activeTab(tabName){
+			this.currentTab = tabName
+		}
 	}
 }
 </script>
@@ -92,11 +95,12 @@ export default {
 		padding-left: 8px;
 		padding-right: 8px;
 		white-space: nowrap;
+		color: black;
 	}
 	.product__main {
+		display: flex;
 		max-width: 100%;
-		min-height: 200px;
-		border: 1px dotted blue;
+		height: 60vh;
 	}
 
 	.product__related__header {

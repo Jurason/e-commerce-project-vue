@@ -13,7 +13,6 @@ const routes = [
       {
         path: ":tabName",
         name: 'productCard.info',
-        // props: route => ({...route.params}),
       },
     ]
   },

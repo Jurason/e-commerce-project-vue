@@ -2,8 +2,8 @@
 // [ ] Один компонент для продуктовой карточки со слотом под добавление/удаления из корзины ()
 // [ ] Привести в порядок CSS в соответствии с BEM
 // [ ] Сделать страницу товара (по примеру розетки)
-// [ ] Валидацию на инпуты
 // [ ] Валидацию на пропсы и эмитсы
+// [x] Валидацию на инпуты
 // [x] Добавить компонент загрузки во время загрузки данных
 // [x] Lazy Load
 // [x] Добавить изображения
@@ -59,12 +59,15 @@ export default {
 			},
 			updateProductInCart: (item, quantity) => {
 				const itemToCart = JSON.parse(JSON.stringify(item));
+				if(!quantity){
+					return
+				}
 				itemToCart.stock = parseInt(quantity);
 				if (!this.findProductInCart(itemToCart)) {
 					this.cart.push(itemToCart);
 				} else {
 					const alreadyAdded = this.findProductInCart(itemToCart);
-					alreadyAdded.stock += itemToCart.stock;
+					alreadyAdded.stock = itemToCart.stock;
 				}
 				this.setToLocalStorage()
 			},
