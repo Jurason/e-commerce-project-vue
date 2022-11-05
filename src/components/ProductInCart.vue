@@ -9,14 +9,14 @@
       <div class="description">{{ product.description }}</div>
       <div class="quantity">Quantity:
 				<button
-						@click="removeOne"
+						@click="counter--"
 						class="remove-item"
 						:disabled="!moreThenOne"
 				>-</button>
         <input type="text" v-model="counter" />
 				<button
           :disabled="!availableQuantity"
-          @click="addOne"
+          @click="counter++"
           class="add-item"
         >+</button>
       </div>
@@ -57,21 +57,12 @@ export default {
 		removeProduct() {
 			this.$root.$data.removeProductFromCart(this.product)
 		},
-		addOne(){
-			this.counter++
-			this.$root.$data.updateProductInCart(this.product, 1)
-		},
-		removeOne(){
-			this.counter--
-			this.$root.$data.updateProductInCart(this.product, -1)
-		}
   },
   watch: {
     counter() {
-      this.$emit("change-quantity", {
-        product: this.product,
-        newValue: this.counter,
-      });
+			this.counter = this.counter < 1 ? 1 : this.counter
+			this.counter = this.counter > this.maxQuantity ? this.maxQuantity : this.counter
+			this.$root.$data.updateProductInCart(this.product, this.counter)
     },
   },
 };
