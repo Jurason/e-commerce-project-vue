@@ -21,11 +21,11 @@
 				<component :product="product" :is="currentTabComponent"/>
 			</keep-alive>
 		</div>
-		<div class="product__related">
-			<h2 class="product__related__header">Related products</h2>
-			<RelatedProductsSlider/>
-		</div>
 	</section>
+	<div class="product__related">
+		<h2 class="product__related__header">Related products</h2>
+		<RelatedProductsSlider/>
+	</div>
 </template>
 
 <script>
@@ -42,12 +42,12 @@ export default {
 		productName: {type: String, required: true}
 	},
 	mounted(){
-		this.product = this.$root.$data.store.find(item => item.title === this.productName)
+		this.initComponent()
 	},
 	data(){
 		return {
 			product: null,
-			currentTab: 'overview'
+			currentTab: 'overview',
 		}
 	},
 	computed: {
@@ -65,12 +65,17 @@ export default {
 		},
 	},
 	methods: {
+		initComponent(){
+			this.product = this.$root.$data.store.find(item => item.title === this.productName)
+		},
 		activeTab(tabName){
 			this.currentTab = tabName
-		}
+		},
 	},
-	watch(){
-
+	watch: {
+		productName(){
+			this.initComponent()
+		}
 	}
 }
 </script>
@@ -83,7 +88,6 @@ export default {
 		border: 0;
 	}
 	.product {
-		height: 100vh;
 	}
 	.product__navbar {
 		background-color: #d3dff2;
@@ -111,6 +115,11 @@ export default {
 		display: flex;
 		max-width: 100%;
 		height: 60vh;
+	}
+	.product__related {
+		position: relative;
+		margin: auto;
+		max-width: 80%;
 	}
 
 	.product__related__header {

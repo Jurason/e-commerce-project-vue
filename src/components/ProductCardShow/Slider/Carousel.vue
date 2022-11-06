@@ -21,7 +21,7 @@ export default {
 	name: "CarouselComponent",
 	components: {CarouselItem},
 	props: {
-		slides: {type: Array, required: true}
+		slides: {type: Array, required: true},
 	},
 	data() {
 		return {
@@ -40,6 +40,11 @@ export default {
 			const index = this.currentSlideIndex > 0 ? this.currentSlideIndex - 1 : this.slides.length - 1
 			this.setCurrentSlideIndex(index)
 		}
+	},
+	watch: {
+		slides(){
+			this.currentSlideIndex = 0
+		}
 	}
 }
 </script>
@@ -47,6 +52,7 @@ export default {
 <style scoped>
 	.carousel__wrapper {
 		position: relative;
+		margin: auto;
 		width: 50%;
 		height: 100%;
 	}
@@ -73,7 +79,7 @@ export default {
 	.carousel__slides--row {
 		display: flex;
 		height: 20%;
-		gap: 20px;
+		justify-content: center;
 	}
 	.carousel__slides--row__item {
 		width: 25%;

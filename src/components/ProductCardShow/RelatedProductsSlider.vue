@@ -2,6 +2,7 @@
 	<div class="list__wrapper">
 		<button @click="prev" class="slider-controls left"></button>
 		<button @click="next" class="slider-controls right"></button>
+		<div class="list__inner__wrapper">
 		<ul ref="list" class="related__products__list">
 			<li class="related__products__item" v-for="product in productList" :key="product.id">
 				<ProductCard :product="product">
@@ -9,6 +10,7 @@
 				</ProductCard>
 			</li>
 		</ul>
+		</div>
 	</div>
 </template>
 
@@ -19,17 +21,27 @@ export default {
 	components: {
 		ProductCard
 	},
+	data(){
+		return{
+			position: 0
+		}
+	},
 	computed: {
 		productList(){
 			return this.$root.$data.store
-		}
+		},
 	},
+	cardWidth: 180,
 	methods: {
 		prev(){
-			this.$refs.list.style.marginLeft = 900 + 'px'
+			this.position += this.$options.cardWidth * 4
+			this.position = Math.min(this.position, 0)
+			this.$refs.list.style.marginLeft = this.position + 'px'
 		},
 		next(){
-			this.$refs.list.style.marginLeft = -900 + 'px'
+			this.position -= this.$options.cardWidth * 4
+			this.position = Math.max(this.position, -this.$options.cardWidth * (this.productList.length - 6))
+			this.$refs.list.style.marginLeft = this.position + 'px'
 		}
 	}
 }
@@ -38,17 +50,23 @@ export default {
 <style scoped>
 .list__wrapper {
 	position: relative;
+	margin: auto;
+	width: calc(7 * 180px + 4 * 30px);
+}
+.list__inner__wrapper {
+	overflow-x: hidden;
+	margin: auto;
 }
 .related__products__list {
 	position: relative;
 	list-style: none;
 	display: flex;
 	gap: 30px;
-	overflow: hidden;
+	overflow-x: hidden;
+	transition: .8s;
 }
 .related__products__item {
-	display: inline-block;
-	min-width: calc(100vw / 9);
+	min-width: 180px;
 	max-height: 30vh;
 }
 .slider-controls {
