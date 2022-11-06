@@ -23,7 +23,7 @@
 		</div>
 		<div class="product__related">
 			<h2 class="product__related__header">Related products</h2>
-			<div class="product__related__slider">Slider</div>
+			<RelatedProductsSlider/>
 		</div>
 	</section>
 </template>
@@ -32,8 +32,12 @@
 import ProductOverviewComponent from "../components/ProductCardShow/ProductOverviewComponent";
 import ProductDetailsComponent from "../components/ProductCardShow/ProductDetailsComponent";
 import ProductReviewsComponent from "../components/ProductCardShow/ProductReviewsComponent";
+import RelatedProductsSlider from "../components/ProductCardShow/RelatedProductsSlider";
 export default {
 	name: "ProductCardShow",
+	components: {
+		RelatedProductsSlider
+	},
 	props: {
 		productName: {type: String, required: true}
 	},
@@ -64,6 +68,9 @@ export default {
 		activeTab(tabName){
 			this.currentTab = tabName
 		}
+	},
+	watch(){
+
 	}
 }
 </script>
@@ -74,6 +81,9 @@ export default {
 		margin: 0;
 		padding: 0;
 		border: 0;
+	}
+	.product {
+		height: 100vh;
 	}
 	.product__navbar {
 		background-color: #d3dff2;

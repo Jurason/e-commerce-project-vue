@@ -5,21 +5,23 @@
 		</router-link>
 			<div class="description">{{ descriptionHandler }}</div>
 			<div class="price">Price: ${{ product.price.toFixed(2) }}</div>
-		<div class="footer">
-      <button
-        :disabled="!isAvailable"
-        :class="{ 'opacity-5': !isAvailable }"
-        @click="$emit('product-view', product)"
-      >
-        View product</button
-      >&nbsp;<button
-        @click="$emit('quick-buy', product)"
-        :disabled="!isAvailable"
-        :class="{ 'opacity-5': !isAvailable }"
-      >
-        Quick Buy
-      </button>
-    </div>
+		<slot>
+			<div class="footer">
+				<button
+					:disabled="!isAvailable"
+					:class="{ 'opacity-5': !isAvailable }"
+					@click="$emit('product-view', product)"
+				>
+					View product</button
+				>&nbsp;<button
+					@click="$emit('quick-buy', product)"
+					:disabled="!isAvailable"
+					:class="{ 'opacity-5': !isAvailable }"
+				>
+					Quick Buy
+				</button>
+			</div>
+		</slot>
   </div>
 </template>
 

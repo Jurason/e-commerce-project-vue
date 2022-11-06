@@ -1,6 +1,6 @@
 <template>
 	<CarouselComponent :slides="productImages"/>
-	<div>Overview information!!!</div>
+	<div class="product__main__info">Overview information!!!</div>
 </template>
 
 <script>
@@ -23,5 +23,8 @@ export default {
 </script>
 
 <style scoped>
-
+	.product__main__info {
+		width: 50%;
+		margin: auto;
+	}
 </style>
