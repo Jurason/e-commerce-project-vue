@@ -24,7 +24,7 @@
 	</section>
 	<div class="product__related">
 		<h2 class="product__related__header">Related products</h2>
-		<RelatedProductsSlider/>
+		<RelatedProductsSlider :productList="$root.$data.store" :listLength="5"/>
 	</div>
 </template>
 
@@ -75,6 +75,7 @@ export default {
 	watch: {
 		productName(){
 			this.initComponent()
+			this.currentTab = 'overview'
 		}
 	}
 }
