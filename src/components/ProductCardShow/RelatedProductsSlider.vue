@@ -1,16 +1,14 @@
 <template>
 	<div class="list__wrapper">
-		<button @click="prev" class="slider-controls left"></button>
-		<button @click="next" class="slider-controls right"></button>
-		<div class="list__inner__wrapper">
-		<ul ref="list" class="related__products__list">
-			<li class="related__products__item" v-for="product in productList" :key="product.id">
+		<button :disabled="!prevButtonIsActive" @click="prev" class="slider-controls left">&#8656;</button>
+		<button :disabled="!nextButtonIsActive" @click="next" class="slider-controls right">&#8658;</button>
+		<ul class="related__products__list">
+			<li class="related__products__item" v-for="(product, index) in paginatedList" :key="product.id" :data-index="index">
 				<ProductCard :product="product">
 					<template></template>
 				</ProductCard>
 			</li>
 		</ul>
-		</div>
 	</div>
 </template>
 
@@ -21,29 +19,45 @@ export default {
 	components: {
 		ProductCard
 	},
+	props:{
+		productList: {type: Array, required: true},
+		listLength: {type: Number, required: false}
+	},
+	defaultInterval: 6,
+	mounted(){
+		this.interval = this.listLength || this.$options.defaultInterval
+	},
 	data(){
 		return{
-			position: 0
+			indexStart: 0,
+			interval: null,
 		}
 	},
 	computed: {
-		productList(){
-			return this.$root.$data.store
+		paginatedList(){
+			this.checkBoundaryConditions()
+			return this.productList.slice(this.indexStart, this.indexStart + this.interval)
 		},
+		nextButtonIsActive(){
+			return this.indexStart < this.productList.length - this.interval
+		},
+		prevButtonIsActive(){
+			return !!this.indexStart
+		}
 	},
-	cardWidth: 180,
 	methods: {
 		prev(){
-			this.position += this.$options.cardWidth * 4
-			this.position = Math.min(this.position, 0)
-			this.$refs.list.style.marginLeft = this.position + 'px'
+			this.indexStart -= this.interval
 		},
 		next(){
-			this.position -= this.$options.cardWidth * 4
-			this.position = Math.max(this.position, -this.$options.cardWidth * (this.productList.length - 6))
-			this.$refs.list.style.marginLeft = this.position + 'px'
-		}
-	}
+			this.indexStart += this.interval
+		},
+		checkBoundaryConditions(){
+			this.indexStart = Math.max(this.indexStart, 0)
+			const indexEnd = this.indexStart + this.interval
+			this.indexStart = indexEnd > this.productList.length - 1 ? this.productList.length - this.interval : this.indexStart
+		},
+	},
 }
 </script>
 
@@ -51,23 +65,19 @@ export default {
 .list__wrapper {
 	position: relative;
 	margin: auto;
-	width: calc(7 * 180px + 4 * 30px);
-}
-.list__inner__wrapper {
-	overflow-x: hidden;
-	margin: auto;
+	height: 30vh;
+	width: fit-content;
+	max-width: 100%;
 }
 .related__products__list {
-	position: relative;
 	list-style: none;
+	height: 100%;
 	display: flex;
-	gap: 30px;
-	overflow-x: hidden;
-	transition: .8s;
+	gap: 10px;
+	justify-content: center;
 }
 .related__products__item {
-	min-width: 180px;
-	max-height: 30vh;
+	width: 200px;
 }
 .slider-controls {
 	position: absolute;
@@ -81,6 +91,7 @@ export default {
 	left: 0;
 }
 .right {
-	right: 0;
+	right: -40px;
 }
+
 </style>

@@ -67,6 +67,7 @@ export default {
 	transition: transform 1s;
 }
 .item {
-	width: 25%;
+	width: 200px;
+	height: 300px;
 }
 </style>
