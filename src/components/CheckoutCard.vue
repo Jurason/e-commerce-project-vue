@@ -25,10 +25,10 @@ export default {
   emits: { checkout: null },
 	computed: {
 		getTotal(){
-			return this.$root.$data.getCartTotal().total
+			return this.$root.$data.cartTotal().total
 		},
 		getSubTotal(){
-			return this.$root.$data.getCartTotal().subTotal
+			return this.$root.$data.cartTotal().subTotal
 		},
 		isCartEmpty(){
 			return !this.$root.$data.cart.length

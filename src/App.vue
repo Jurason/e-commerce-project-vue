@@ -1,8 +1,9 @@
 //TODO
 // [ ] Один компонент для продуктовой карточки со слотом под добавление/удаления из корзины ()
-// [ ] Привести в порядок CSS в соответствии с BEM
-// [ ] Сделать страницу товара (по примеру розетки)
 // [ ] Валидацию на пропсы и эмитсы
+// [ ] Сделать страницу товара (по примеру розетки)
+// [ ] Сделать карусель с пагинацией
+// [ ] Привести в порядок CSS в соответствии с BEM
 // [x] Валидацию на инпуты
 // [x] Добавить компонент загрузки во время загрузки данных
 // [x] Lazy Load
@@ -41,46 +42,15 @@ export default {
     return {
       store: [],
 			cart: [],
-			getProductFromStore: (product) => {
-				return this.findProductInStore(product)
-			},
-			removeOrderedItemsFromStore: () => {
-				this.cart.forEach((product) => {
-					const currentProduct = this.findProductInStore(product);
-					currentProduct.stock -= product.stock;
-				});
-			},
-			emptyCart: () => {
-				this.cart = []
-				this.setToLocalStorage()
-			},
-			getProductFromCart: (product) => {
-				return this.findProductInCart(product)
-			},
-			updateProductInCart: (item, quantity) => {
-				const itemToCart = JSON.parse(JSON.stringify(item));
-				if(!quantity){
-					return
-				}
-				itemToCart.stock = parseInt(quantity);
-				if (!this.findProductInCart(itemToCart)) {
-					this.cart.push(itemToCart);
-				} else {
-					const alreadyAdded = this.findProductInCart(itemToCart);
-					alreadyAdded.stock = itemToCart.stock;
-				}
-				this.setToLocalStorage()
-			},
-			getCartTotal: () => {
-				const subTotal = this.cart.reduce((acc, el) => acc + el.price * el.stock,0);
-				const total = subTotal * (1 + SHIPPING_RATE);
-				return { subTotal: subTotal, total: total };
-			},
-			removeProductFromCart: (item) => {
-				const index = this.cart.findIndex((el) => el.id === item.id);
-				this.cart.splice(index, 1);
-				this.setToLocalStorage()
-			},
+
+			cartTotal: () => this.getCartTotal,
+			getProductFromStore: (product) => this.findProductInStore(product),
+			getProductFromCart: (product) => this.findProductInCart(product),
+
+			updateProductInCart: (item, quantity) => this.updateCart(item, quantity),
+			removeProductFromCart: (item) => this.removeFromCart(item),
+			removeOrderedItemsFromStore: () => this.removeOrdered(),
+			emptyCart: () => this.clearCart(),
     };
   },
 	methods: {
@@ -98,10 +68,44 @@ export default {
 			if(cartProducts){
 				this.cart = JSON.parse(cartProducts)
 			}
+		},
+		removeFromCart(item){
+			const index = this.cart.findIndex((el) => el.id === item.id);
+			this.cart.splice(index, 1);
+			this.setToLocalStorage()
+		},
+		removeOrdered(){
+				this.cart.forEach((product) => {
+				const currentProduct = this.findProductInStore(product);
+				currentProduct.stock -= product.stock;
+			})
+		},
+		updateCart(item, quantity){
+				const itemToCart = JSON.parse(JSON.stringify(item));
+				if(!quantity){
+					return
+				}
+				itemToCart.stock = parseInt(quantity);
+				if (!this.findProductInCart(itemToCart)) {
+					this.cart.push(itemToCart);
+				} else {
+					const alreadyAdded = this.findProductInCart(itemToCart);
+					alreadyAdded.stock = itemToCart.stock;
+				}
+				this.setToLocalStorage()
+			},
+		clearCart(){
+			this.cart = []
+			this.setToLocalStorage()
 		}
 	},
-	computed: {},
-	watch: {}
+	computed: {
+		getCartTotal() {
+			const subTotal = this.cart.reduce((acc, el) => acc + el.price * el.stock,0);
+			const total = subTotal * (1 + SHIPPING_RATE);
+			return { subTotal: subTotal, total: total };
+		},
+	},
 };
 </script>
 
