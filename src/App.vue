@@ -4,6 +4,7 @@
 // [ ] Сделать страницу товара (по примеру розетки)
 // [ ] Сделать карусель с пагинацией
 // [ ] Привести в порядок CSS в соответствии с BEM
+// [x] Обработка ошибок API
 // [x] Валидацию на инпуты
 // [x] Добавить компонент загрузки во время загрузки данных
 // [x] Lazy Load
@@ -18,8 +19,9 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/checkout">Checkout</router-link>
   </nav>
-  <router-view v-if="store.length" />
+	<router-view v-if="store.length" />
 	<LoadingBar v-else/>
+	<div class="api-error" v-if="apiError">Something wrong with serve response!</div>
 </template>
 
 <script>
@@ -35,13 +37,20 @@ export default {
 		LoadingBar
 	},
 	async mounted() {
-		await loadData().then(data => this.store = data.products)
+		const apiResponse = await loadData()
+		if(apiResponse.status !== 200){
+			this.apiError = true
+			return
+		}
+		this.store = apiResponse.data
+		console.log('this.store:', this.store)
 		this.getFromLocalStorage()
 	},
 	data() {
     return {
       store: [],
 			cart: [],
+			apiError: false,
 
 			cartTotal: () => this.getCartTotal,
 			getProductFromStore: (product) => this.findProductInStore(product),

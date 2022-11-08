@@ -125,7 +125,7 @@ export default {
 }
 .wrapper-product {
   position: fixed;
-	min-width: 40vw;
+	width: 40vw;
   transform: translateX(-50%);
   top: 30%;
   left: 50%;
@@ -164,6 +164,9 @@ export default {
     font-size: 14px;
     color: grey;
   }
+}
+.footer {
+	margin: auto;
 }
 .background-red {
   background-color: indianred;

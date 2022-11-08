@@ -35,27 +35,24 @@ export default {
 	},
 	computed: {
 		paginatedList(){
-			this.checkBoundaryConditions()
 			return this.productList.slice(this.indexStart, this.indexStart + this.interval)
 		},
 		nextButtonIsActive(){
-			return this.indexStart < this.productList.length - this.interval
+			return true
 		},
 		prevButtonIsActive(){
-			return !!this.indexStart
+			return true
 		}
 	},
 	methods: {
 		prev(){
-			this.indexStart -= this.interval
+
 		},
 		next(){
-			this.indexStart += this.interval
+
 		},
 		checkBoundaryConditions(){
-			this.indexStart = Math.max(this.indexStart, 0)
-			const indexEnd = this.indexStart + this.interval
-			this.indexStart = indexEnd > this.productList.length - 1 ? this.productList.length - this.interval : this.indexStart
+
 		},
 	},
 }

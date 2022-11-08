@@ -53,7 +53,7 @@ export default {
 	justify-content: space-between;
 	height: 100%;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   align-items: center;
   background-color: sandybrown;
   box-shadow: 0 0 5px grey;
