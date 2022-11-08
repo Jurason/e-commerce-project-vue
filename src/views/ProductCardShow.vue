@@ -24,7 +24,7 @@
 	</section>
 	<div class="product__related">
 		<h2 class="product__related__header">Related products</h2>
-		<RelatedProductsSlider :productList="$root.$data.store" :listLength="5"/>
+		<RelatedProductsSlider :productList="$root.$data.store"/>
 	</div>
 </template>
 
@@ -122,9 +122,8 @@ export default {
 		margin: auto;
 		max-width: 80%;
 	}
-
 	.product__related__header {
-		text-align: left;
+		text-align: center;
 	}
 	.product__related__slider {
 		min-height: 200px;
