@@ -4,9 +4,9 @@
 		But it's never too late to
 		<router-link to="/">buy something</router-link>
 	</div>
-		<div class="item" v-for="item in $root.$data.cart" :key="item.id">
-			<slot name="product" :product="item"></slot>
-		</div>
+	<div class="item" v-for="item in $root.$data.cart" :key="item.id">
+		<slot name="product" :product="item"></slot>
+	</div>
 </template>
 
 <script>
@@ -19,4 +19,5 @@ export default {
 	}
 }
 </script>
-<style scoped></style>
+<style scoped>
+</style>

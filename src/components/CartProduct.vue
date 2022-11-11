@@ -1,34 +1,38 @@
 <template>
-	<div class="wrapper">
-    <div class="left-block">
+	<div class="cart-product">
+    <div class="cart-product__left">
 			<img :src="product.images['0']" alt="product" />
     </div>
-    <div class="right-block">
-      <div @click="removeProduct" class="delete-icon">X</div>
-      <div class="title">{{ product.title }}</div>
-      <div class="description">{{ product.description }}</div>
-      <div class="quantity">Quantity:
-				<button
-						@click="counter--"
-						class="remove-item"
+    <div class="cart-product__right">
+      <div @click="removeProduct" class="cart-product__right__close-icon close-icon">X</div>
+      <div class="cart-product__right__title">{{ product.title }}</div>
+      <div class="cart-product__right__description">{{ product.description }}</div>
+      <div class="cart-product__right__quantity"><span class="cart-product__right__quantity__text">Quantity:</span>
+				<BaseButton
 						:disabled="!moreThenOne"
-				>-</button>
+						name="-"
+						@click="counter--"
+				/>
         <input type="text" v-model="counter" />
-				<button
-          :disabled="!availableQuantity"
-          @click="counter++"
-          class="add-item"
-        >+</button>
+				<BaseButton
+						:disabled="!availableQuantity"
+						name="+"
+						@click="counter++"
+				/>
       </div>
-      <div class="price">${{ product.price }}</div>
+      <div class="cart-product__right__price">${{ product.price }}</div>
     </div>
   </div>
 </template>
 
 <script>
+import BaseButton from "./BaseButton";
 
 export default {
-  name: "ProductInCart",
+  name: "CartProduct",
+	components: {
+		BaseButton
+	},
   props: {
     product: Object,
   },
@@ -69,12 +73,11 @@ export default {
 </script>
 
 <style lang="scss">
-.wrapper {
-  width: 100%;
+.cart-product {
   height: 20vh;
   margin-left: auto;
   margin-right: auto;
-  min-height: 100px;
+  //min-height: 100px;
   border: 2px solid yellowgreen;
   display: flex;
   background-color: sandybrown;
@@ -83,46 +86,72 @@ export default {
   border-radius: 15px;
   position: relative;
 }
-.left-block {
+.cart-product__left {
   //width: 30%;
   img {
     width: 100%;
 		height: 100%;
   }
 }
-.right-block {
+.cart-product__right {
   display: flex;
   flex-direction: column;
   text-align: left;
   padding: 0 20px;
   justify-content: space-between;
-  .delete-icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 20px;
-  }
-  .delete-icon:hover {
-    opacity: 0.5;
-  }
-  .title {
+
+  &__title {
     font-weight: bold;
   }
-  .description {
+  &__description {
   }
-  .quantity {
+  &__quantity {
+		display: flex;
+		gap: 2px;
+		align-items: center;
     input {
       width: 50px;
       text-align: center;
+			height: 100%;
     }
+		.button-base {
+			padding: 5px 10px;
+		}
   }
-  .price {
+  &__price {
 		position: absolute;
 		bottom: 0;
 		right: 0;
 		padding: 10px;
   }
+}
+
+@media screen and (max-width: 880px) {
+	.cart-product {
+		height: fit-content;
+	}
+	.cart-product__left{
+		display: none;
+	}
+	.cart-product__right {
+		width: 100%;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		align-items: center;
+	}
+	.cart-product__right__description {
+		display: none;
+	}
+	.cart-product__right__price {
+		position: relative;
+		text-align: right;
+	}
+	.cart-product__right__quantity {
+		height: 80%;
+		margin-left: auto;
+	}
+	.cart-product__right__quantity__text {
+		display: none;
+	}
 }
 </style>

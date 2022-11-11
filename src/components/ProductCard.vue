@@ -3,32 +3,34 @@
     <router-link style="text-decoration: none" :to="{name: 'productCard.show', params: {productName: product.title}}">
 			<h3>{{ product.title }}</h3>
 		</router-link>
-			<div class="description">{{ descriptionHandler }}</div>
-			<div class="price">Price: ${{ product.price.toFixed(2) }}</div>
+			<div class="product-card__description">{{ descriptionHandler }}</div>
+			<div class="product-card__price">Price: ${{ product.price.toFixed(2) }}</div>
 		<slot>
-			<div class="footer">
-				<button
-					:disabled="!isAvailable"
-					:class="{ 'opacity-5': !isAvailable }"
-					@click="$emit('product-view', product)"
-				>
-					View product</button
-				>&nbsp;<button
-					@click="$emit('quick-buy', product)"
-					:disabled="!isAvailable"
-					:class="{ 'opacity-5': !isAvailable }"
-				>
-					Quick Buy
-				</button>
+			<div class="product-card__footer">
+				<BaseButton
+						name="View product"
+						:disabled="!isAvailable"
+						@click="$emit('product-view', product)"
+				/>&nbsp;
+				<BaseButton
+						name="Quick Buy"
+						:disabled="!isAvailable"
+						@click="$emit('quick-buy', product)"
+				/>
 			</div>
 		</slot>
   </div>
 </template>
 
 <script>
+import BaseButton from "./BaseButton";
+
 export default {
   name: "ProductCard",
-  props: {
+	components: {
+		BaseButton
+	},
+	props: {
     product: {type: Object, required: true},
   },
   emits: {
@@ -69,25 +71,11 @@ export default {
     background-color: rgba(0, 0, 0, 0.5);
   }
 }
-.footer {
+.product-card__footer {
   display: flex;
   justify-content: center;
 	gap: 10px;
   align-items: flex-end;
-  button {
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    background-color: rgb(79, 160, 187);
-    color: black;
-    font-weight: bold;
-    cursor: pointer;
-    outline: none;
-  }
-  button:hover {
-    transform: scale(1.05);
-    transition-duration: 0.4s;
-    transition-delay: 0.1s;
-  }
 }
+
 </style>

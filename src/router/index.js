@@ -7,7 +7,7 @@ const routes = [
   {
     path: "/products/:productName",
     name: 'productCard.show',
-    component: () => import('../views/ProductCardShow'),
+    component: () => import('../views/ProducShow'),
     props: route => ({...route.params}),
     children: [
       {

@@ -1,9 +1,8 @@
 //TODO
-// [ ] Один компонент для продуктовой карточки со слотом под добавление/удаления из корзины ()
 // [ ] Валидацию на пропсы и эмитсы
 // [ ] Сделать страницу товара (по примеру розетки)
-// [ ] Сделать карусель с пагинацией
 // [ ] Привести в порядок CSS в соответствии с BEM
+// [x] Сделать карусель с пагинацией
 // [x] Обработка ошибок API
 // [x] Валидацию на инпуты
 // [x] Добавить компонент загрузки во время загрузки данных
@@ -43,7 +42,6 @@ export default {
 			return
 		}
 		this.store = apiResponse.data
-		console.log('this.store:', this.store)
 		this.getFromLocalStorage()
 	},
 	data() {
@@ -119,6 +117,12 @@ export default {
 </script>
 
 <style lang="scss">
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -138,5 +142,16 @@ nav {
       color: #42b983;
     }
   }
+}
+.close-icon {
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding: 10px;
+	cursor: pointer;
+	font-size: 20px;
+}
+.close-icon:hover {
+	opacity: 0.5;
 }
 </style>

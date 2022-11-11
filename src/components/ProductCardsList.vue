@@ -1,4 +1,5 @@
 <template>
+	<NoResults v-if="!filteredItems.length"/>
 	<transition-group
 			name="list"
 			@before-enter="onBeforeEnter"
@@ -11,10 +12,15 @@
 </template>
 
 <script>
+import NoResults from "./NoResults";
+
 import gsap from 'gsap'
 
 export default {
 	name: "ProductCardList",
+	components: {
+		NoResults
+	},
 	props: {
 		filterOptions: {type: Object, required: true}
 	},

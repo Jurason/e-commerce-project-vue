@@ -1,47 +1,46 @@
 <template>
 	<transition name="view-product">
-	<div class="viewer-background" v-if="isOpen">
-    <div class="wrapper-product">
-      <div class="product">
-        <div class="close-sign" @click="$emit('close', null)">X</div>
-        <h2 class="title">{{ product.title }}</h2>
-        <div class="description">{{ product.description }}</div>
-        <div class="price">Price: ${{ product.price.toFixed(2) }}</div>
-        <div class="footer">
-          <button
-            :disabled="!isAvailableQuantity"
-            :class="{
-              'opacity-5': !isAvailableQuantity,
-              'cursor-default': !isAvailableQuantity,
-            }"
-            @click="addToCart"
-          >
-            Add to cart</button
-          >&nbsp;
+	<div class="popup__backdrop" v-if="isOpen">
+    <div class="popup__container">
+      <div class="popup__content">
+        <div class="popup__content__close-icon close-icon" @click="$emit('close', null)">X</div>
+        <h2 class="popup__content__title">{{ product.title }}</h2>
+        <div class="popup__content__description">{{ product.description }}</div>
+        <div class="popup__content__price">Price: ${{ product.price.toFixed(2) }}</div>
+        <div class="popup__content__footer">
+					<BaseButton
+							:disabled="!isAvailableQuantity"
+							name="Add to cart"
+							@click="addToCart"
+					/>
           <input
             v-model="quantityInput"
-            class="quantity-input"
+            class="popup__content__footer__quantity-input"
             type="text"
             placeholder="Enter quantity"
 						ref="input"
-          />&nbsp;
-          <div class="quantity">
+          />
+          <div class="popup__content__footer__quantity">
             stock balance {{ maxQuantityForCurrentProduct }}
           </div>
         </div>
       </div>
-      <div class="checkout-block">
-        <slot name="checkout"></slot>
-      </div>
     </div>
+		<div class="popup__content__checkout-block checkout-block">
+			<slot name="checkout"></slot>
+		</div>
   </div>
 	</transition>
 </template>
 
 <script>
+import BaseButton from "./BaseButton";
 
 export default {
-  name: "ViewProductCard",
+  name: "ProductPopup",
+	components: {
+		BaseButton
+	},
   data() {
     return {
       quantityInput: null,
@@ -115,66 +114,62 @@ export default {
 }
 //******	transition css	******//
 
-.viewer-background {
+.popup__backdrop {
   height: 100vh;
   width: 100%;
   background-color: rgba(124, 124, 124, 0.55);
   z-index: 100;
   position: fixed;
   top: 0;
+	display: flex;
+	gap: 20px;
 }
-.wrapper-product {
-  position: fixed;
-	width: 40vw;
-  transform: translateX(-50%);
-  top: 30%;
-  left: 50%;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
+.popup__container {
+	width: 500px;
+	height: 250px;
+	margin-left: calc(50% - 250px);
+	margin-top: 15%;
 }
-.product {
+.popup__content {
+	position: relative;
+	width: 100%;
+	height: 100%;
   padding: 20px;
   display: flex;
   flex-direction: column;
+	justify-content: space-between;
   gap: 10px;
   background-color: whitesmoke;
-  border-radius: 10px;
-  .close-sign {
-    position: absolute;
-    right: 0;
-    top: 0;
+  border-radius: 1em;
+  .popup__content__close-icon {
     padding: 20px;
-    cursor: pointer;
-    font-size: 20px;
   }
-  .title {
+  .popup__content__title {
     padding: 0;
-    margin: auto;
+    margin: 0 auto;
   }
-  .quantity-input {
-    max-width: 100px;
-    padding: 5px;
-    outline: none;
-  }
-  .close-sign:hover {
+  .popup__content__close-icon:hover {
     opacity: 0.5;
   }
-  .quantity {
-    font-size: 14px;
-    color: grey;
-  }
+	.popup__content__footer {
+		margin: 0 auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		.popup__content__footer__quantity-input {
+			max-width: 100px;
+			padding: 5px;
+			outline: none;
+		}
+		.popup__content__footer__quantity {
+			font-size: 14px;
+			color: grey;
+		}
+	}
 }
-.footer {
-	margin: auto;
-}
-.background-red {
-  background-color: indianred;
-}
-.opacity-5 {
-  opacity: 0.5;
-}
-.cursor-default {
-  cursor: default;
+.popup__content__checkout-block {
+	width: 200px;
+	margin-top: 15%;
 }
 </style>

@@ -4,8 +4,7 @@
 			<FilterOptions @filter="filterHandler($event)"/>
 		</div>
 		<div class="product-list">
-			<NoResults v-if="false"/>
-			<ProductCardList v-else :filterOptions="filterOptions">
+			<ProductCardList :filterOptions="filterOptions">
 				<template #product="slotProp">
 					<ProductCard
 							@product-view="productView($event)"
@@ -40,11 +39,10 @@
 <script>
 import ProductCardsList from "../components/ProductCardsList";
 import ProductCard from "../components/ProductCard.vue";
-import ViewProductCard from "../components/ViewProductCard";
-import CheckoutCard from "../components/CheckoutCard";
+import ViewProductCard from "../components/ProductPopup";
+import CheckoutCard from "../components/CheckoutBoard";
 import ConfirmationModal from "../components/ConfirmationModal";
 import FilterOptions from "../components/FilterOptions";
-import NoResults from "../components/NoResults";
 
 export default {
   name: "HomeView",
@@ -55,7 +53,6 @@ export default {
     CheckoutCard,
     ConfirmationModal,
 		FilterOptions,
-		NoResults
   },
 	data() {
     return {

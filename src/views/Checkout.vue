@@ -1,6 +1,6 @@
 <template>
-  <div class="checkout">
-    <div class="items-list">
+  <div class="cart">
+    <div class="cart__cart-list cart-list">
 			<CartList>
 				<template v-slot:product="slotProp">
 					<ProductInCart
@@ -9,8 +9,8 @@
 				</template>
 			</CartList>
     </div>
-    <CheckoutCard @checkout="active.confirmationModal = true" />
-    <ConfirmationModal
+		<CheckoutCard @checkout="active.confirmationModal = true" />
+		<ConfirmationModal
       :isOpen="active.confirmationModal"
       @close="active.confirmationModal = false"
       @confirm="orderConfirmed($event)"
@@ -18,8 +18,8 @@
   </div>
 </template>
 <script>
-import ProductInCart from "../components/ProductInCart";
-import CheckoutCard from "../components/CheckoutCard";
+import ProductInCart from "../components/CartProduct";
+import CheckoutCard from "../components/CheckoutBoard";
 import ConfirmationModal from "../components/ConfirmationModal";
 import CartList from "../components/CartList";
 
@@ -52,20 +52,29 @@ export default {
 };
 </script>
 <style lang="scss">
-* {
-  box-sizing: border-box;
-}
-.checkout {
-  display: flex;
-  width: 80vw;
-  margin: auto;
+.cart {
+	width: 60%;
+	margin: auto;
+	display: grid;
+	grid-template-columns: 3fr 1fr;
   gap: 20px;
 }
-.items-list {
-  margin: auto;
+.cart__cart-list {
   display: flex;
   flex-direction: column;
-  width: 80%;
   gap: 15px;
+}
+.cart__checkout-board {
+
+}
+@media screen and (max-width: 1200px) {
+	.cart {
+		width: 80%;
+	}
+}
+@media screen and (max-width: 880px) {
+	.cart{
+		grid-template-columns: 1fr;
+	}
 }
 </style>

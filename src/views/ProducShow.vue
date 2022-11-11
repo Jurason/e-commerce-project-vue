@@ -1,5 +1,5 @@
 <template>
-	<section class="product" v-if="product">
+	<section class="produc" v-if="product">
 		<div class="product__heading">
 			<h1 class="product__title">{{product.title}}</h1>
 		</div>
@@ -29,10 +29,10 @@
 </template>
 
 <script>
-import ProductOverviewComponent from "../components/ProductCardShow/ProductOverviewComponent";
-import ProductDetailsComponent from "../components/ProductCardShow/ProductDetailsComponent";
-import ProductReviewsComponent from "../components/ProductCardShow/ProductReviewsComponent";
-import RelatedProductsSlider from "../components/ProductCardShow/RelatedProductsSlider";
+import ProductOverviewComponent from "../components/ProductShow/ProductOverviewComponent";
+import ProductDetailsComponent from "../components/ProductShow/ProductDetailsComponent";
+import ProductReviewsComponent from "../components/ProductShow/ProductReviewsComponent";
+import RelatedProductsSlider from "../components/ProductShow/RelatedProductsSlider";
 export default {
 	name: "ProductCardShow",
 	components: {
@@ -88,7 +88,7 @@ export default {
 		padding: 0;
 		border: 0;
 	}
-	.product {
+	.produc {
 	}
 	.product__navbar {
 		background-color: #d3dff2;

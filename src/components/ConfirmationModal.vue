@@ -3,7 +3,7 @@
     <div class="popup">
       <h3>Please, confirm your order!</h3>
       <hr />
-      <div class="footer">
+      <div class="popup__content__footer">
         Phone: <input type="text" placeholder="+1-222-333-444" />
         &nbsp;
         <button @click="$emit('confirm', { saveCartState: saveCartState })">
@@ -76,7 +76,7 @@ export default {
   z-index: 100;
 }
 
-.footer {
+.popup__content__footer {
   align-items: center;
   margin: auto;
 }
