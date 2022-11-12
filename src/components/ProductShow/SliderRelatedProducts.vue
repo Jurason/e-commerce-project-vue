@@ -11,11 +11,19 @@
 				</li>
 			</ul>
 		</div>
+		<div class="slider__indicators">
+			<div ref="indicators" v-for="(item, index) in indicatorsQuantity"
+				:key="item.id"
+				class="slider__indicators__item"
+				:class="{'active': currentIndicatorIndex === index}"
+			></div>
+		</div>
 	</div>
 </template>
 
 <script>
 import ProductCard from "../ProductCard";
+
 export default {
 	name: "SliderRelatedProducts",
 	components: {
@@ -37,18 +45,28 @@ export default {
 		window.removeEventListener('resize', this.resizeHandler)
 	},
 	data(){
-		return{
+		return {
 			position: 0,
 			cardQuantity: null,
 			cardWidth: null,
+			currentIndicatorIndex: 0
 		}
 	},
 	computed: {
 		nextButtonIsActive(){
-			return true
+			return this.position !== this.positionMax
 		},
 		prevButtonIsActive(){
-			return true
+			return this.position
+		},
+		positionMax(){
+			return -this.cardWidth * (this.productList.length - this.cardQuantity) - 10 * (this.productList.length - this.cardQuantity)
+		},
+		indicatorsQuantity(){
+			if(!this.cardQuantity){
+				return
+			}
+			return Math.ceil(this.productList.length / this.cardQuantity)
 		},
 	},
 	methods: {
@@ -56,11 +74,13 @@ export default {
 			this.position += this.cardWidth * this.cardQuantity + 10 * this.cardQuantity
 			this.position = Math.min(this.position, 0)
 			this.$refs.list.style.marginLeft = this.position + 'px'
+			this.currentIndicatorIndex--
 		},
 		next(){
 			this.position -= this.cardWidth * this.cardQuantity + 10 * this.cardQuantity
-			this.position = Math.max(this.position, -this.cardWidth * (this.productList.length - this.cardQuantity) - 10 * (this.productList.length - this.cardQuantity))
+			this.position = Math.max(this.position, this.positionMax)
 			this.$refs.list.style.marginLeft = this.position + 'px'
+			this.currentIndicatorIndex++
 		},
 		resizeHandler(){
 			if(window.innerWidth > 1440) this.cardQuantity = this.cardCount || this.$options.defaultCardQuantity
@@ -68,15 +88,21 @@ export default {
 			if(window.innerWidth < 1200) this.cardQuantity = Math.min(this.cardCount,this.$options.defaultCardQuantity - 2) || 4
 			if(window.innerWidth < 970) this.cardQuantity = Math.min(this.cardCount,this.$options.defaultCardQuantity - 3) || 3
 			this.setContainerWidth()
+			this.indicatorIndexCheck()
 		},
 		setContainerWidth(){
 			this.$refs.wrapper.style.width = this.cardQuantity * this.cardWidth + (this.cardQuantity - 1) * 10 + 'px'
+		},
+		indicatorIndexCheck(){
+			// this.currentIndicatorIndex = this.currentIndicatorIndex > this.indicatorsQuantity - 1 ? this.indicatorsQuantity - 1 : this.currentIndicatorIndex
+			// this.currentIndicatorIndex = this.currentIndicatorIndex < 0 ? 0 : this.currentIndicatorIndex
+			console.log('this.currentIndicatorIndex:', this.currentIndicatorIndex)
 		}
 	},
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .slider {
 	position: relative;
 	margin: auto;
@@ -102,6 +128,24 @@ export default {
 .slider__content__item {
 	height: 100%;
 	min-width: 180px;
+}
+.slider__indicators {
+	display: flex;
+	margin: 10px 0 10px 0;
+	gap: 10px;
+	justify-content: center;
+}
+.slider__indicators__item {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background-color: green;
+	opacity: .5;
+
+}
+.active {
+	opacity: 1;
+	scale: 1.4;
 }
 .slider__controls {
 	position: absolute;

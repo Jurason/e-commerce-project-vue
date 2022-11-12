@@ -112,7 +112,7 @@ export default {
 	}
 	.product-related {
 		position: relative;
-		margin: auto;
+		margin: 30px auto;
 		max-width: 80%;
 	}
 	.product-related__header {
