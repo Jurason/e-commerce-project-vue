@@ -5,7 +5,7 @@
 			@before-enter="onBeforeEnter"
 			@enter="onEnter"
 	>
-		<div class="item" v-for="(item, index) in filteredItems" :key="item.id" :data-index="index">
+		<div class="product-list__item" v-for="(item, index) in filteredItems" :key="item.id" :data-index="index">
 			<slot name="product" :product="item"></slot>
 		</div>
 	</transition-group>
@@ -72,7 +72,7 @@ export default {
 .list-move {
 	transition: transform 1s;
 }
-.item {
+.product-list__item {
 	width: 200px;
 	height: 300px;
 }

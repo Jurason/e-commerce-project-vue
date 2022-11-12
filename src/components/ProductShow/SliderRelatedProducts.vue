@@ -1,10 +1,10 @@
 <template>
-	<div class="list__wrapper">
-		<button :disabled="!prevButtonIsActive" @click="prev" class="slider-controls left">&#8656;</button>
-		<button :disabled="!nextButtonIsActive" @click="next" class="slider-controls right">&#8658;</button>
-		<div ref="wrapper" class="list__inner__wrapper">
-			<ul ref="list" class="related__products__list">
-				<li class="related__products__item" v-for="product in productList" :key="product.id">
+	<div class="slider">
+		<button :disabled="!prevButtonIsActive" @click="prev" class="slider__controls left">&#8656;</button>
+		<button :disabled="!nextButtonIsActive" @click="next" class="slider__controls right">&#8658;</button>
+		<div ref="wrapper" class="slider__inner__wrapper">
+			<ul ref="list" class="slider__content">
+				<li class="slider__content__item" v-for="product in productList" :key="product.id">
 					<ProductCard :product="product">
 						<template></template>
 					</ProductCard>
@@ -17,7 +17,7 @@
 <script>
 import ProductCard from "../ProductCard";
 export default {
-	name: "RelatedProductsSlider",
+	name: "SliderRelatedProducts",
 	components: {
 		ProductCard
 	},
@@ -77,19 +77,19 @@ export default {
 </script>
 
 <style scoped>
-.list__wrapper {
+.slider {
 	position: relative;
 	margin: auto;
 	height: 30vh;
 	width: fit-content;
 	max-width: 100%;
 }
-.list__inner__wrapper {
+.slider__inner__wrapper {
 	margin: auto;
 	overflow-x: hidden;
 	height: 100%;
 }
-.related__products__list {
+.slider__content {
 	list-style: none;
 	height: 100%;
 	display: flex;
@@ -99,11 +99,11 @@ export default {
 	padding: 0;
 	transition: all 1s ease;
 }
-.related__products__item {
+.slider__content__item {
 	height: 100%;
 	min-width: 180px;
 }
-.slider-controls {
+.slider__controls {
 	position: absolute;
 	height: 50px;
 	width: 30px;

@@ -1,20 +1,24 @@
 <template>
-  <div v-if="isOpen" class="backdrop">
-    <div class="popup">
+  <div v-if="isOpen" class="confirmation-modal__backdrop">
+    <div class="confirmation-modal__content">
       <h3>Please, confirm your order!</h3>
       <hr />
-      <div class="popup__content__footer">
+      <div class="confirmation-modal__content__footer">
         Phone: <input type="text" placeholder="+1-222-333-444" />
         &nbsp;
-        <button @click="$emit('confirm', { saveCartState: saveCartState })">
-          Confirm
-        </button>
-        &nbsp;
-        <button @click="$emit('close', null)" class="cancel-button">
-          Cancel
-        </button>
+				<BaseButton
+						:disabled="false"
+						name="Confirm"
+						@click="$emit('confirm', { saveCartState: saveCartState })"
+				/>&nbsp;
+				<BaseButton
+						:disabled="false"
+						name="Cancel"
+						@click="$emit('close', null)"
+						class="confirmation-modal__content__footer__cancel-button cancel-button"
+				/>
       </div>
-      <div class="checkbox">
+      <div class="confirmation-modal__content__checkbox">
         <input
           type="checkbox"
           :checked="saveCartState"
@@ -25,8 +29,13 @@
   </div>
 </template>
 <script>
+import BaseButton from "./BaseButton";
+
 export default {
   name: "ConfirmationModal",
+	components: {
+		BaseButton
+	},
   props: {
     isOpen: { type: Boolean, required: true },
   },
@@ -48,25 +57,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.popup {
-  top: 50px;
+.confirmation-modal__content {
+  top: 20%;
   padding: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 40%;
   position: fixed;
   z-index: 101;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 1em;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
-.popup h3 {
+.confirmation-modal__content h3 {
   text-align: center;
   margin: 0;
 }
-.cancel-button {
+.confirmation-modal__content__footer__cancel-button {
   background-color: indianred;
 }
-.backdrop {
+.confirmation-modal__backdrop {
   position: fixed;
   top: 0;
   left: 0;
@@ -76,11 +87,11 @@ export default {
   z-index: 100;
 }
 
-.popup__content__footer {
+.confirmation-modal__content__footer {
   align-items: center;
   margin: auto;
 }
-.checkbox {
+.confirmation-modal__content__checkbox {
   text-align: left;
 }
 </style>

@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import CarouselComponent from './Slider/Carousel'
+import CarouselComponent from './CarouselImages/Carousel'
 
 export default {
 	name: "ProductOverviewComponent",

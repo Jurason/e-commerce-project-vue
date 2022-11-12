@@ -7,8 +7,8 @@
 									:slide="slide"
 									:index="index"
 									:currentSlideIndex="currentSlideIndex" class="carousel__item"/>
-		<div class="carousel__slides--row">
-			<div class="carousel__slides--row__item" v-for="(slide, index) in slides" :key="slide">
+		<div class="carousel__slides-row">
+			<div class="carousel__slides-row__item" v-for="(slide, index) in slides" :key="slide">
 				<img @click="setCurrentSlideIndex(index)" :class="{'active': currentSlideIndex === index}" :src="slide" alt="">
 			</div>
 		</div>
@@ -76,15 +76,15 @@ export default {
 	.right {
 		right: 0;
 	}
-	.carousel__slides--row {
+	.carousel__slides-row {
 		display: flex;
 		height: 20%;
 		justify-content: center;
 	}
-	.carousel__slides--row__item {
+	.carousel__slides-row__item {
 		width: 25%;
 	}
-	.carousel__slides--row__item img {
+	.carousel__slides-row__item img {
 		max-width: 100%;
 		max-height: 100%;
 		opacity: .6;

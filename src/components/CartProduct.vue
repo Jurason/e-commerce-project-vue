@@ -77,7 +77,6 @@ export default {
   height: 20vh;
   margin-left: auto;
   margin-right: auto;
-  //min-height: 100px;
   border: 2px solid yellowgreen;
   display: flex;
   background-color: sandybrown;
@@ -87,7 +86,6 @@ export default {
   position: relative;
 }
 .cart-product__left {
-  //width: 30%;
   img {
     width: 100%;
 		height: 100%;

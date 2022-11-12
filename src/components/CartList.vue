@@ -4,7 +4,7 @@
 		But it's never too late to
 		<router-link to="/">buy something</router-link>
 	</div>
-	<div class="item" v-for="item in $root.$data.cart" :key="item.id">
+	<div class="cart-list__item" v-for="item in $root.$data.cart" :key="item.id">
 		<slot name="product" :product="item"></slot>
 	</div>
 </template>
