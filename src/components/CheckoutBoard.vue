@@ -88,6 +88,9 @@ export default {
 		color: rgb(79, 160, 187);
 		box-shadow: 0 0 5px #fff;
   }
+	.button-base__disabled {
+		box-shadow: none;
+	}
 }
 @media screen and (max-width: 880px) {
 	.checkout-container {

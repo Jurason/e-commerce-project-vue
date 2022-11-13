@@ -4,7 +4,7 @@
 		But it's never too late to
 		<router-link to="/">buy something</router-link>
 	</div>
-	<div class="cart-list__item" v-for="item in $root.$data.cart" :key="item.id">
+	<div class="cart-list__item" v-for="item in cartProducts" :key="item.id">
 		<slot name="product" :product="item"></slot>
 	</div>
 </template>
@@ -12,9 +12,12 @@
 <script>
 export default {
 	name: "CartList",
+	props: {
+		cartProducts: {type: Object, required: true}
+	},
 	computed:{
 		isCartEmpty(){
-			return !this.$root.$data.cart.length
+			return !this.cartProducts.length
 		}
 	}
 }

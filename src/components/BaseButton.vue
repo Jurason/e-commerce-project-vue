@@ -30,14 +30,16 @@ export default {
 	outline: none;
 }
 
-.button-base__disabled {
-	cursor: default;
-	opacity: .5;
-}
-
 .button-base:hover {
 	transform: scale(1.05);
 	transition-duration: 0.4s;
 	transition-delay: 0.1s;
+}
+.button-base__disabled {
+	cursor: default;
+	opacity: .5;
+}
+.button-base__disabled:hover {
+	transform: none;
 }
 </style>

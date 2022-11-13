@@ -22,14 +22,15 @@ export default {
 		NoResults
 	},
 	props: {
+		products: {type: Object, required: true},
 		filterOptions: {type: Object, required: true}
 	},
 	computed: {
 		filteredItems(){
 			if(!this.filterOptions.input && Object.keys(this.filterOptions).every(key => this.filterOptions[key] === false)){
-				return this.$root.$data.store
+				return this.products
 			}
-			const filteredProducts = this.$root.$data.store.filter(item => {
+			const filteredProducts = this.products.filter(item => {
 				return item.title.toUpperCase().includes(this.filterOptions.input.toUpperCase())
 			})
 			if(this.filterOptions.byPrice){

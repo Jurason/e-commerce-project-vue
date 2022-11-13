@@ -1,7 +1,7 @@
 <template>
   <div class="cart">
     <div class="cart__cart-list cart-list">
-			<CartList>
+			<CartList :cartProducts="$root.$data.cart">
 				<template v-slot:product="slotProp">
 					<ProductInCart
 							:product="slotProp.product"

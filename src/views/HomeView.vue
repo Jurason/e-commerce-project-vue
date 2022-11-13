@@ -4,7 +4,7 @@
 			<FilterOptions @filter="filterHandler($event)"/>
 		</div>
 		<div class="product-list">
-			<ProductCardList :filterOptions="filterOptions">
+			<ProductCardList :products="$root.$data.store" :filterOptions="filterOptions" >
 				<template #product="slotProp">
 					<ProductCard
 							@product-view="productView($event)"
@@ -15,12 +15,12 @@
 			</ProductCardList>
 		</div>
 	</div>
-  <ViewProductCard
+  <ProductPopup
     :isOpen="active.productViewer"
     :product="currentProductForView"
     @close="active.productViewer = false"
   />
-  <ViewProductCard
+  <ProductPopup
     :isOpen="active.quickBuy"
     :product="currentProductForView"
     @close="active.quickBuy = false"
@@ -28,7 +28,7 @@
     <template v-slot:checkout>
       <CheckoutCard @checkout="active.confirmationModal = true" />
     </template>
-  </ViewProductCard>
+  </ProductPopup>
   <ConfirmationModal
     :isOpen="active.confirmationModal"
     @close="active.confirmationModal = false"
@@ -39,7 +39,7 @@
 <script>
 import ProductCardsList from "../components/ProductCardsList";
 import ProductCard from "../components/ProductCard.vue";
-import ViewProductCard from "../components/ProductPopup";
+import ProductPopup from "../components/ProductPopup";
 import CheckoutCard from "../components/CheckoutBoard";
 import ConfirmationModal from "../components/ConfirmationModal";
 import FilterOptions from "../components/FilterOptions";
@@ -49,7 +49,7 @@ export default {
   components: {
 		ProductCardList: ProductCardsList,
     ProductCard,
-    ViewProductCard,
+		ProductPopup,
     CheckoutCard,
     ConfirmationModal,
 		FilterOptions,

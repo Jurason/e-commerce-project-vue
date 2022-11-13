@@ -1,7 +1,7 @@
 <template>
 	<div class="slider">
-		<button :disabled="!prevButtonIsActive" @click="prev" class="slider__controls left">&#8656;</button>
-		<button :disabled="!nextButtonIsActive" @click="next" class="slider__controls right">&#8658;</button>
+		<BaseButton :disabled="!prevButtonIsActive" name="&#8656;" @click="prev" class="slider__controls left"/>
+		<BaseButton :disabled="!nextButtonIsActive" name="&#8658;" @click="next" class="slider__controls right"/>
 		<div ref="wrapper" class="slider__inner__wrapper">
 			<ul ref="list" class="slider__content">
 				<li class="slider__content__item" v-for="product in productList" :key="product.id">
@@ -23,11 +23,13 @@
 
 <script>
 import ProductCard from "../ProductCard";
+import BaseButton from "../BaseButton";
 
 export default {
 	name: "SliderRelatedProducts",
 	components: {
-		ProductCard
+		ProductCard,
+		BaseButton
 	},
 	props:{
 		productList: {type: Array, required: true},
@@ -96,7 +98,6 @@ export default {
 		indicatorIndexCheck(){
 			// this.currentIndicatorIndex = this.currentIndicatorIndex > this.indicatorsQuantity - 1 ? this.indicatorsQuantity - 1 : this.currentIndicatorIndex
 			// this.currentIndicatorIndex = this.currentIndicatorIndex < 0 ? 0 : this.currentIndicatorIndex
-			console.log('this.currentIndicatorIndex:', this.currentIndicatorIndex)
 		}
 	},
 }
@@ -152,7 +153,6 @@ export default {
 	height: 50px;
 	width: 30px;
 	top: calc(50% - 25px);
-	opacity: .6;
 	z-index: 101;
 }
 .left {

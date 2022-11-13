@@ -33,10 +33,12 @@ import ProductOverviewComponent from "../components/ProductShow/ProductOverviewC
 import ProductDetailsComponent from "../components/ProductShow/ProductDetailsComponent";
 import ProductReviewsComponent from "../components/ProductShow/ProductReviewsComponent";
 import RelatedProductsSlider from "../components/ProductShow/SliderRelatedProducts";
+import GitHubCard from "../components/GitHubCard";
 export default {
 	name: "ProductCardShow",
 	components: {
-		RelatedProductsSlider
+		RelatedProductsSlider,
+		GitHubCard
 	},
 	props: {
 		productName: {type: String, required: true}
@@ -109,6 +111,7 @@ export default {
 		display: flex;
 		max-width: 100%;
 		height: 60vh;
+		padding: 0 24px;
 	}
 	.product-related {
 		position: relative;
@@ -117,5 +120,6 @@ export default {
 	}
 	.product-related__header {
 		text-align: center;
+		margin-bottom: 10px;
 	}
 </style>
