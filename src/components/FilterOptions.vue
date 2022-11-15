@@ -37,5 +37,7 @@ export default {
 </script>
 
 <style scoped>
-
+ input {
+ outline: none;
+ }
 </style>

@@ -4,7 +4,7 @@
 			<FilterOptions @filter="filterHandler($event)"/>
 		</div>
 		<div class="product-list">
-			<ProductCardList :products="$root.$data.store" :filterOptions="filterOptions" >
+			<ProductCardList :products="productList" :filterOptions="filterOptions" >
 				<template #product="slotProp">
 					<ProductCard
 							@product-view="productView($event)"
@@ -54,8 +54,15 @@ export default {
     ConfirmationModal,
 		FilterOptions,
   },
+	props: {
+		searchResults: {type: Array, required: false}
+	},
+	mounted(){
+		this.productList = this.$root.$data.store
+	},
 	data() {
     return {
+			productList: [],
 			filterOptions: {},
       currentProductForView: null,
       active: {
@@ -88,6 +95,11 @@ export default {
 			}
     },
   },
+	watch: {
+		searchResults(){
+			this.productList = this.searchResults
+		}
+	}
 };
 </script>
 <style>

@@ -4,10 +4,11 @@ import HomeView from "../views/HomeView.vue";
 const routes = [
   {
     path: "/",
-    component: HomeView },
+    component: HomeView,
+  },
   {
     path: "/checkout",
-    component: () => import('../views/Checkout')
+    component: () => import('../views/Checkout'),
   },
   {
     path: "/products/:productName",

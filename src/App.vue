@@ -15,11 +15,14 @@
 // [?] Переписать на Vuex
 
 <template>
-  <nav style="text-align: left; width: 80%; margin: auto">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/checkout">Checkout</router-link>
+  <nav>
+    <div class="nav__tabs">
+			<router-link to="/">Home</router-link> |
+			<router-link to="/checkout">Checkout</router-link>
+		</div>
+		<SearchBar :products="store" @searchResults="searchResultsHandler($event)"/>
   </nav>
-	<router-view v-if="store.length" />
+	<router-view :searchResults="searchResults" v-if="store.length" />
 	<LoadingBar v-else/>
 	<div class="api-error" v-if="apiError">Something wrong with serve response!</div>
 </template>
@@ -27,6 +30,7 @@
 <script>
 import { loadData } from "./api";
 import LoadingBar from "./components/LoadingBar";
+import SearchBar from "./components/SearchBar";
 
 const SHIPPING_RATE = 0.05
 export const SHIPPING_FEE = SHIPPING_RATE * 100 + "%"
@@ -34,7 +38,8 @@ export const SHIPPING_FEE = SHIPPING_RATE * 100 + "%"
 export default {
   name: "App",
 	components:{
-		LoadingBar
+		LoadingBar,
+		SearchBar
 	},
 	async mounted() {
 		const apiResponse = await loadData()
@@ -50,6 +55,7 @@ export default {
       store: [],
 			cart: [],
 			apiError: false,
+			searchResults: [],
 
 			cartTotal: () => this.getCartTotal,
 			getProductFromStore: (product) => this.findProductInStore(product),
@@ -62,6 +68,14 @@ export default {
     };
   },
 	methods: {
+		searchResultsHandler(arr){
+			this.searchResults = [...arr]
+			console.log('arr:', arr)
+
+			console.log('this.searchResults:', this.searchResults)
+
+		},
+
 		findProductInCart(product) {
 			return this.cart.find((t) => t.id === product.id);
 		},
@@ -133,16 +147,23 @@ export default {
 }
 
 nav {
-  padding: 30px;
+	width: 80%;
+	margin: auto;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 30px;
+	.nav__tabs {
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+		a {
+			font-weight: bold;
+			color: #2c3e50;
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+			&.router-link-exact-active {
+				color: #42b983;
+			}
+		}
+	}
 }
 .close-icon {
 	position: absolute;
