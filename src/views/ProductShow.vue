@@ -35,7 +35,7 @@ import ProductReviewsComponent from "../components/ProductShow/ProductReviewsCom
 import RelatedProductsSlider from "../components/ProductShow/SliderRelatedProducts";
 import GitHubCard from "../components/GitHubCard";
 export default {
-	name: "ProductCardShow",
+	name: "ProductShow",
 	components: {
 		RelatedProductsSlider,
 		GitHubCard

@@ -14,13 +14,18 @@ const routes = [
     path: "/products/:productName",
     name: 'productCard.show',
     component: () => import('../views/ProductShow'),
-    props: route => ({...route.params}),
+    props: route => ({productName: route.params.productName}),
     children: [
       {
         path: ":tabName",
         name: 'productCard.info',
       },
     ]
+  },
+  {
+    path: "/search/:query",
+    name: 'searchResults.show',
+    component: () => import('../views/SearchResultsView'),
   },
 ];
 

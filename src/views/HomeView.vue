@@ -58,7 +58,7 @@ export default {
 		searchResults: {type: Array, required: false}
 	},
 	mounted(){
-		this.productList = this.$root.$data.store
+		this.productList = this.$root.$data.searchResults || this.$root.$data.store
 	},
 	data() {
     return {

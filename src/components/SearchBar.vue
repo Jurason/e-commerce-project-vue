@@ -26,11 +26,6 @@ export default {
 	props: {
 		products: {type: Array, required: false}
 	},
-	emits: {
-		searchResults(payload){
-			return Array.isArray(payload)
-		}
-	},
 	mounted(){
 		window.addEventListener('keydown', this.keydownHandler)
 		window.addEventListener('click', this.clickHandler)
@@ -42,7 +37,7 @@ export default {
 	data() {
 		return {
 			searchInput: '',
-			isVisible: true
+			isVisible: false
 		}
 	},
 	computed: {
@@ -59,15 +54,20 @@ export default {
 		keydownHandler(e){
 			if(this.filteredListLength && e.key === 'Enter'){
 				this.searchConfirm()
-				this.isVisible = false
 				this.$refs.searchInput.blur()
+				this.isVisible = false
 			}
 		},
 		clickHandler(){
 			this.isVisible = false
 		},
 		searchConfirm(){
-			this.$emit('searchResults', this.filteredList)
+			this.$router.push({name: 'searchResults.show', path: `/search`, params: {query: this.searchInput}})
+		}
+	},
+	watch: {
+		$route(){
+			this.searchInput = this.$route.params.query || ''
 		}
 	}
 }

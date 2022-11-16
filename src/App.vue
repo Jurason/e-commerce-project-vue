@@ -1,7 +1,7 @@
 //TODO
-// [ ] Валидацию на пропсы и эмитсы
 // [ ] Сделать страницу товара (по примеру розетки)
-// [ ] Строка поиска
+// [x] Валидацию на пропсы и эмитсы
+// [x] Строка поиска
 // [x] Привести в порядок CSS в соответствии с BEM
 // [x] Сделать карусель с пагинацией
 // [x] Обработка ошибок API
@@ -20,9 +20,9 @@
 			<router-link to="/">Home</router-link> |
 			<router-link to="/checkout">Checkout</router-link>
 		</div>
-		<SearchBar :products="store" @searchResults="searchResultsHandler($event)"/>
+		<SearchBar :products="store"/>
   </nav>
-	<router-view :searchResults="searchResults" v-if="store.length" />
+	<router-view v-if="store.length" />
 	<LoadingBar v-else/>
 	<div class="api-error" v-if="apiError">Something wrong with serve response!</div>
 </template>
@@ -48,14 +48,16 @@ export default {
 			return
 		}
 		this.store = apiResponse.data
+		//page reload
 		this.getFromLocalStorage()
+		this.urlHandler()
 	},
 	data() {
     return {
       store: [],
 			cart: [],
 			apiError: false,
-			searchResults: [],
+			searchResults: null,
 
 			cartTotal: () => this.getCartTotal,
 			getProductFromStore: (product) => this.findProductInStore(product),
@@ -68,14 +70,9 @@ export default {
     };
   },
 	methods: {
-		searchResultsHandler(arr){
-			this.searchResults = [...arr]
-			console.log('arr:', arr)
-
-			console.log('this.searchResults:', this.searchResults)
-
+		searchHandler(str){
+			this.searchResults = this.store.filter(item => item.title.toLowerCase().includes(str))
 		},
-
 		findProductInCart(product) {
 			return this.cart.find((t) => t.id === product.id);
 		},
@@ -90,6 +87,13 @@ export default {
 			if(cartProducts){
 				this.cart = JSON.parse(cartProducts)
 			}
+		},
+		urlHandler(){
+			if(!this.$route.params?.query){
+				this.searchResults = null
+				return
+			}
+			this.searchHandler(this.$route.params.query)
 		},
 		removeFromCart(item){
 			const index = this.cart.findIndex((el) => el.id === item.id);
@@ -128,6 +132,11 @@ export default {
 			return { subTotal: subTotal, total: total };
 		},
 	},
+	watch: {
+		$route(){
+			this.urlHandler()
+		}
+	}
 };
 </script>
 
