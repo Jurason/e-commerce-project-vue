@@ -48,7 +48,7 @@ export default {
   },
   computed: {
 		getMaxQuantity() {
-			return this.$root.$data.getProductFromStore(this.product).stock;
+			return this.$root.$data.getProductFromStore(this.product)?.stock || this.counter
 		},
     availableQuantity() {
       return this.counter < this.maxQuantity;

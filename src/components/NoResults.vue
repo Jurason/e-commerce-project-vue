@@ -1,6 +1,6 @@
 <template>
 	<transition name="no-result">
-		<div class="no-results">No results</div>
+		<div class="no-results">No products</div>
 	</transition>
 </template>
 

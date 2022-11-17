@@ -72,7 +72,8 @@ export default {
       },
     };
   },
-  computed: {},
+  computed: {
+	},
   methods: {
 		filterHandler(filterOptions){
 			this.filterOptions = filterOptions

@@ -4,7 +4,7 @@
 			<h3>{{ product.title }}</h3>
 		</router-link>
 			<div class="product-card__description">{{ descriptionHandler }}</div>
-			<div class="product-card__price">Price: ${{ product.price.toFixed(2) }}</div>
+			<div class="product-card__price">Price: ${{ priceHandler }}</div>
 		<slot>
 			<div class="product-card__footer">
 				<BaseButton
@@ -39,8 +39,17 @@ export default {
   },
   computed: {
     descriptionHandler() {
+			if(!this.product.description){
+				return
+			}
       return this.product.description.substring(0, 50);
     },
+		priceHandler(){
+			if(!this.product.price){
+				return
+			}
+			return this.product.price.toFixed(2)
+		},
     isAvailable() {
       return this.product.stock;
     },

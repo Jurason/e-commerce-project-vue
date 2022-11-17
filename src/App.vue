@@ -42,15 +42,24 @@ export default {
 		SearchBar
 	},
 	async mounted() {
-		const apiResponse = await loadData()
-		if(apiResponse.status !== 200){
-			this.apiError = true
-			return
-		}
-		this.store = apiResponse.data
 		//page reload
 		this.getFromLocalStorage()
 		this.urlHandler()
+		//api request
+		const apiResponseData = await loadData()
+		if(typeof apiResponseData !== "object"){
+			this.apiError = true
+			setTimeout(() => {
+				this.apiError = false
+				this.$router.push({path: '/checkout'})
+				this.store.push({
+					id: 0,
+					title: 'No data'
+				})
+			}, 3000)
+			return
+		}
+		this.store = apiResponseData
 	},
 	data() {
     return {
@@ -135,7 +144,7 @@ export default {
 	watch: {
 		$route(){
 			this.urlHandler()
-		}
+		},
 	}
 };
 </script>
