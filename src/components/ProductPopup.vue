@@ -1,6 +1,6 @@
 <template>
 	<transition name="view-product">
-	<div class="popup__backdrop" v-if="isOpen">
+	<div ref="backdrop" class="popup__backdrop" v-if="isOpen">
     <div class="popup__container">
       <div class="popup__content">
         <div class="popup__content__close-icon close-icon" @click="$emit('close', null)">X</div>
@@ -53,9 +53,11 @@ export default {
   },
   mounted() {
     document.addEventListener("keydown", this.handleKeydown);
+    document.addEventListener("click", this.handleClick);
   },
   beforeUnmount() {
     document.removeEventListener("keydown", this.handleKeydown);
+		document.removeEventListener("click", this.handleClick);
   },
   computed: {
     isAvailableQuantity() {
@@ -77,6 +79,11 @@ export default {
         this.$emit("close");
       }
     },
+		handleClick(e){
+			if(this.isOpen && e.target === this.$refs.backdrop){
+				this.$emit("close");
+			}
+		},
     addToCart() {
       this.updateCartState();
       this.quantityInput = null;
@@ -121,6 +128,7 @@ export default {
   z-index: 100;
   position: fixed;
   top: 0;
+	left: 0;
 	display: flex;
 	gap: 20px;
 }

@@ -9,8 +9,13 @@
 					ref="searchInput"
 			>
 		</div>
-		<ul v-if="isVisible" class="search-block__results">
-			<li @click="searchInput = ''" v-for="product in filteredList" :key="product.id" class="search-block__results__item">
+		<ul @mouseover="resetDropdownIndex" v-if="isVisible" class="search-block__results">
+			<li
+					@click="searchInput = ''"
+					v-for="(product, index) in handledFilteredList" :key="product.id"
+					:class="{'focused': index === currentDropdownIndex}"
+					class="search-block__results__item"
+			>
 				<router-link style="text-decoration: none; width: 100%; cursor: pointer" :to="{name: 'productCard.show', params: {productName: product.title}}">
 				{{ product.title }}
 				</router-link>
@@ -37,25 +42,41 @@ export default {
 	data() {
 		return {
 			searchInput: '',
+			currentDropdownIndex: -1,
 			isVisible: false
 		}
 	},
 	computed: {
 		filteredList(){
 			return this.searchInput
-					? this.products.filter(item => item.title.toLowerCase().includes(this.searchInput.toLowerCase()))
+					? this.products.filter(product => product.title.toLowerCase().includes(this.searchInput.toLowerCase()))
 					: ''
+		},
+		handledFilteredList(){
+			return this.filteredList.slice(0,10)
 		},
 		filteredListLength(){
 			return this.filteredList.length
 		},
 	},
 	methods: {
+		resetDropdownIndex(){
+			this.currentDropdownIndex = -1
+		},
 		keydownHandler(e){
 			if(this.filteredListLength && e.key === 'Enter'){
-				this.searchConfirm()
+				this.searchInput = this.currentDropdownIndex >= 0 ? this.filteredList[this.currentDropdownIndex].title : this.searchInput
 				this.$refs.searchInput.blur()
 				this.isVisible = false
+				this.searchConfirm()
+			}
+			if(this.searchInput && e.key === 'ArrowUp'){
+				this.currentDropdownIndex--
+				if(this.currentDropdownIndex < 0) this.currentDropdownIndex = -1
+			}
+			if(this.searchInput && e.key === 'ArrowDown'){
+				this.currentDropdownIndex++
+				if(this.currentDropdownIndex > this.filteredListLength - 1) this.currentDropdownIndex = 0
 			}
 		},
 		clickHandler(){
@@ -94,7 +115,7 @@ export default {
 			width: 100%;
 			height: 30px;
 			outline: none;
-			z-index: 101;
+			z-index: 100;
 		}
 	}
 	&__results {
@@ -119,6 +140,9 @@ export default {
 	}
 }
 .search-block__results__item:hover {
-	background-color: grey;
+	background-color: lightgrey;
+}
+.focused {
+	background-color: lightgrey;
 }
 </style>

@@ -1,5 +1,6 @@
 //TODO
 // [ ] Сделать страницу товара (по примеру розетки)
+// [x] Навигация с клавиатуры
 // [x] Валидацию на пропсы и эмитсы
 // [x] Строка поиска
 // [x] Привести в порядок CSS в соответствии с BEM
@@ -42,9 +43,6 @@ export default {
 		SearchBar
 	},
 	async mounted() {
-		//page reload
-		this.getFromLocalStorage()
-		this.urlHandler()
 		//api request
 		const apiResponseData = await loadData()
 		if(typeof apiResponseData !== "object"){
@@ -60,6 +58,9 @@ export default {
 			return
 		}
 		this.store = apiResponseData
+		//page reload
+		this.getFromLocalStorage()
+		this.urlHandler()
 	},
 	data() {
     return {
@@ -80,7 +81,7 @@ export default {
   },
 	methods: {
 		searchHandler(str){
-			this.searchResults = this.store.filter(item => item.title.toLowerCase().includes(str))
+			this.searchResults = this.store.filter(item => item.title.toLowerCase().includes(str.toLowerCase()))
 		},
 		findProductInCart(product) {
 			return this.cart.find((t) => t.id === product.id);
