@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import CarouselComponent from './CarouselImages/Carousel'
-import BaseButton from "../BaseButton";
-import ProductPopup from "../ProductPopup";
+import CarouselComponent from './components/Carousel'
+import BaseButton from "../../components/BaseButton";
+import ProductPopup from "../../components/ProductPopup";
 
 export default {
 	name: "ProductOverviewComponent",

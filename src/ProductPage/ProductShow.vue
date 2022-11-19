@@ -29,16 +29,14 @@
 </template>
 
 <script>
-import ProductOverviewComponent from "../components/ProductShow/ProductOverviewComponent";
-import ProductDetailsComponent from "../components/ProductShow/ProductDetailsComponent";
-import ProductReviewsComponent from "../components/ProductShow/ProductReviewsComponent";
-import RelatedProductsSlider from "../components/ProductShow/SliderRelatedProducts";
-import GitHubCard from "../components/GitHubCard";
+import ProductOverviewComponent from "./ProductOverview/ProductOverviewComponent";
+import ProductDetailsComponent from "./components/ProductDetailsComponent";
+import ProductReviewsComponent from "./components/ProductReviewsComponent";
+import RelatedProductsSlider from "./components/SliderRelatedProducts";
 export default {
 	name: "ProductShow",
 	components: {
 		RelatedProductsSlider,
-		GitHubCard
 	},
 	props: {
 		productName: {type: String, required: true}

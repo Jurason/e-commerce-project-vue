@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import BaseButton from "./BaseButton";
+import BaseButton from "../../components/BaseButton";
 
 export default {
   name: "ProductCard",

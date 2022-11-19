@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import ProductCard from "../ProductCard";
-import BaseButton from "../BaseButton";
+import ProductCard from "../../MainPage/components/ProductCard";
+import BaseButton from "../../components/BaseButton";
 
 export default {
 	name: "SliderRelatedProducts",

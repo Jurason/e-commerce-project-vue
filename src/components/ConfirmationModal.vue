@@ -9,7 +9,7 @@
 				<BaseButton
 						:disabled="false"
 						name="Confirm"
-						@click="$emit('confirm', { saveCartState: saveCartState })"
+						@click="$emit('confirm', saveCartState)"
 				/>&nbsp;
 				<BaseButton
 						:disabled="false"
@@ -23,7 +23,7 @@
           type="checkbox"
           :checked="saveCartState"
           @click="saveCartState = !saveCartState"
-        />Save ordered products in cart
+        />Save products in cart
       </div>
     </div>
   </div>
@@ -41,13 +41,26 @@ export default {
   },
   emits: {
     close: null,
-    confirm: null,
+    confirm: (value) => typeof value === 'boolean',
   },
+	mounted() {
+		document.addEventListener("keydown", this.handleKeydown);
+	},
+	beforeUnmount() {
+		document.removeEventListener("keydown", this.handleKeydown);
+	},
   data() {
     return {
       saveCartState: false,
     };
   },
+	methods: {
+		handleKeydown(e) {
+			if (this.isOpen && e.key === "Escape") {
+				this.$emit("close");
+			}
+		},
+	},
 	watch: {
 		isOpen(){
 			this.saveCartState = false
@@ -62,7 +75,7 @@ export default {
   padding: 20px;
   left: 40%;
   position: fixed;
-  z-index: 101;
+  z-index: 102;
   background-color: white;
   border-radius: 1em;
 	display: flex;

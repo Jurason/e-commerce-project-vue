@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import HomeView from "../MainPage/HomeView.vue";
 
 const routes = [
   {
@@ -8,12 +8,12 @@ const routes = [
   },
   {
     path: "/checkout",
-    component: () => import('../views/Checkout'),
+    component: () => import('../CartPage/Checkout'),
   },
   {
     path: "/products/:productName",
     name: 'productCard.show',
-    component: () => import('../views/ProductShow'),
+    component: () => import('../ProductPage/ProductShow'),
     props: route => ({productName: route.params.productName}),
     children: [
       {
@@ -25,7 +25,7 @@ const routes = [
   {
     path: "/search/:query",
     name: 'searchResults.show',
-    component: () => import('../views/SearchResultsView'),
+    component: () => import('../MainPage/SearchResultsView'),
   },
 ];
 

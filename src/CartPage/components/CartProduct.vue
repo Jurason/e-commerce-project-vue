@@ -1,5 +1,6 @@
 <template>
 	<div class="cart-product">
+		<div v-if="!getMaxQuantity" class="cart-product__disabled"></div>
     <div class="cart-product__left">
 			<img :src="product.images['0']" alt="product" />
     </div>
@@ -26,7 +27,7 @@
 </template>
 
 <script>
-import BaseButton from "./BaseButton";
+import BaseButton from "../../components/BaseButton";
 
 export default {
   name: "CartProduct",
@@ -38,20 +39,18 @@ export default {
   },
   mounted() {
     this.counter = this.product.stock;
-		this.maxQuantity = this.getMaxQuantity
   },
   data() {
     return {
       counter: null,
-      maxQuantity: null,
     };
   },
   computed: {
 		getMaxQuantity() {
-			return this.$root.$data.getProductFromStore(this.product)?.stock || this.counter
+			return this.$root.$data.getProductFromStore(this.product)?.stock || 0
 		},
     availableQuantity() {
-      return this.counter < this.maxQuantity;
+      return this.counter < this.getMaxQuantity;
     },
     moreThenOne() {
       return this.counter > 1;
@@ -65,25 +64,37 @@ export default {
   watch: {
     counter() {
 			this.counter = this.counter < 1 ? 1 : this.counter
-			this.counter = this.counter > this.maxQuantity ? this.maxQuantity : this.counter
+			this.counter = this.counter > this.getMaxQuantity ? this.getMaxQuantity : this.counter
 			this.$root.$data.updateProductInCart(this.product, this.counter)
     },
+		getMaxQuantity(){
+			this.counter = this.counter > this.getMaxQuantity ? this.getMaxQuantity : this.counter
+		}
   },
 };
 </script>
 
 <style lang="scss">
 .cart-product {
+	position: relative;
   height: 20vh;
-  margin-left: auto;
-  margin-right: auto;
-  border: 2px solid yellowgreen;
   display: flex;
-  background-color: sandybrown;
-  box-shadow: 0 0 5px grey;
-  padding: 10px;
-  border-radius: 15px;
-  position: relative;
+	box-shadow: 0 0 5px grey;
+	padding: 10px;
+	border-radius: 15px;
+	border: 2px solid yellowgreen;
+	background-color: sandybrown;
+	overflow: hidden;
+}
+.cart-product__disabled {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	opacity: .6;
+	background-color: lightgrey;
+	z-index: 100;
 }
 .cart-product__left {
   img {
@@ -92,6 +103,7 @@ export default {
   }
 }
 .cart-product__right {
+	width: 200%;
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -121,6 +133,7 @@ export default {
 		bottom: 0;
 		right: 0;
 		padding: 10px;
+		z-index: 99;
   }
 }
 

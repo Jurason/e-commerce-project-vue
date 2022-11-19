@@ -26,7 +26,7 @@
     @close="active.quickBuy = false"
   >
     <template v-slot:checkout>
-      <CheckoutCard @checkout="active.confirmationModal = true" />
+      <CheckoutBoard @checkout="active.confirmationModal = true" />
     </template>
   </ProductPopup>
   <ConfirmationModal
@@ -37,12 +37,12 @@
 </template>
 
 <script>
-import ProductCardsList from "../components/ProductCardsList";
-import ProductCard from "../components/ProductCard.vue";
+import ProductCardsList from "./components/ProductCardsList";
+import ProductCard from "./components/ProductCard.vue";
+import FilterOptions from "./components/FilterOptions";
 import ProductPopup from "../components/ProductPopup";
-import CheckoutCard from "../components/CheckoutBoard";
 import ConfirmationModal from "../components/ConfirmationModal";
-import FilterOptions from "../components/FilterOptions";
+import CheckoutBoard from "../components/CheckoutBoard";
 
 export default {
   name: "HomeView",
@@ -50,7 +50,7 @@ export default {
 		ProductCardList: ProductCardsList,
     ProductCard,
 		ProductPopup,
-    CheckoutCard,
+    CheckoutBoard,
     ConfirmationModal,
 		FilterOptions,
   },

@@ -1,5 +1,6 @@
 //TODO
-// [ ] Сделать страницу товара (по примеру розетки)
+// [ ] Сделать страницу товара (по примеру)
+// [x] Фаловая структура
 // [x] Навигация с клавиатуры
 // [x] Валидацию на пропсы и эмитсы
 // [x] Строка поиска
@@ -73,7 +74,8 @@ export default {
 			getProductFromStore: (product) => this.findProductInStore(product),
 			getProductFromCart: (product) => this.findProductInCart(product),
 
-			updateProductInCart: (item, quantity) => this.updateCart(item, quantity),
+			addProductToCart: (item, quantity) => this.addProduct(item, quantity),
+			updateProductInCart: (item, quantity) => this.updateProductQuantityInCart(item, quantity),
 			removeProductFromCart: (item) => this.removeFromCart(item),
 			removeOrderedItemsFromStore: () => this.removeOrdered(),
 			emptyCart: () => this.clearCart(),
@@ -116,19 +118,24 @@ export default {
 				currentProduct.stock -= product.stock;
 			})
 		},
-		updateCart(item, quantity){
-				const itemToCart = JSON.parse(JSON.stringify(item));
-				if(!quantity){
-					return
-				}
-				itemToCart.stock = parseInt(quantity);
-				if (!this.findProductInCart(itemToCart)) {
-					this.cart.push(itemToCart);
-				} else {
-					const alreadyAdded = this.findProductInCart(itemToCart);
-					alreadyAdded.stock = itemToCart.stock;
-				}
-				this.setToLocalStorage()
+		addProduct(item, quantity){
+			if(!quantity){
+				return
+			}
+			const itemToCart = JSON.parse(JSON.stringify(item));
+			itemToCart.stock = parseInt(quantity);
+			if (!this.findProductInCart(itemToCart)) {
+				this.cart.push(itemToCart);
+			} else {
+				const alreadyAdded = this.findProductInCart(itemToCart);
+				alreadyAdded.stock += itemToCart.stock;
+			}
+			this.setToLocalStorage()
+		},
+		updateProductQuantityInCart(item, newQuantity){
+			const cartItem = this.findProductInCart(item)
+			cartItem.stock = newQuantity
+			this.setToLocalStorage()
 			},
 		clearCart(){
 			this.cart = []
@@ -191,6 +198,7 @@ nav {
 	padding: 10px;
 	cursor: pointer;
 	font-size: 20px;
+	z-index: 100;
 }
 .close-icon:hover {
 	opacity: 0.5;

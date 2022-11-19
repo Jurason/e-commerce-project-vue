@@ -85,6 +85,9 @@ export default {
 			}
 		},
     addToCart() {
+			if(!this.quantityInput){
+				return
+			}
       this.updateCartState();
       this.quantityInput = null;
     },
@@ -92,7 +95,7 @@ export default {
       if (!this.quantityInput) {
         return;
       }
-			this.$root.$data.updateProductInCart(this.product, this.quantityInput)
+			this.$root.$data.addProductToCart(this.product, this.quantityInput)
     },
     updateCurrentQuantity() {
 			this.maxQuantityForCurrentProduct = this.product.stock - this.getProductQuantityInCart;
