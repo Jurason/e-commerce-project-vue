@@ -1,5 +1,8 @@
 //TODO
 // [ ] Сделать страницу товара (по примеру)
+// [ ] Работа с базой данных (WikipediaData)
+// [ ] Работа с базой данных (Google Maps API)
+// [ ] Авторизация
 // [x] Фаловая структура
 // [x] Навигация с клавиатуры
 // [x] Валидацию на пропсы и эмитсы
@@ -133,6 +136,9 @@ export default {
 			this.setToLocalStorage()
 		},
 		updateProductQuantityInCart(item, newQuantity){
+			if(!newQuantity){
+				return
+			}
 			const cartItem = this.findProductInCart(item)
 			cartItem.stock = newQuantity
 			this.setToLocalStorage()

@@ -27,6 +27,11 @@ const routes = [
     name: 'searchResults.show',
     component: () => import('../MainPage/SearchResultsView'),
   },
+  {
+    path: "/map",
+    name: "map.show",
+    component: () => import('../MapExperiments/MapView')
+  }
 ];
 
 const router = createRouter({
