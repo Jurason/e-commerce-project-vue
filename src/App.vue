@@ -1,29 +1,9 @@
-//TODO
-// [ ] Сделать страницу товара (по примеру)
-// [ ] Работа с базой данных (WikipediaData)
-// [ ] Работа с базой данных (Google Maps API)
-// [ ] Авторизация
-// [x] Фаловая структура
-// [x] Навигация с клавиатуры
-// [x] Валидацию на пропсы и эмитсы
-// [x] Строка поиска
-// [x] Привести в порядок CSS в соответствии с BEM
-// [x] Сделать карусель с пагинацией
-// [x] Обработка ошибок API
-// [x] Валидацию на инпуты
-// [x] Добавить компонент загрузки во время загрузки данных
-// [x] Lazy Load
-// [x] Добавить изображения
-// [x] Transition Group
-// [x] Рефакторинг компонента корзины CartList
-
-// [?] Переписать на Vuex
-
 <template>
   <nav>
     <div class="nav__tabs">
 			<router-link to="/">Home</router-link> |
-			<router-link to="/checkout">Checkout</router-link>
+			<router-link to="/checkout">Checkout</router-link> |
+			<router-link to="/map">Map Experiments</router-link>
 		</div>
 		<SearchBar :products="store"/>
   </nav>
@@ -180,13 +160,13 @@ export default {
 
 nav {
 	width: 80%;
+	height: 10vh;
 	margin: auto;
 	display: flex;
 	align-items: center;
 	gap: 10px;
 	padding: 30px;
 	.nav__tabs {
-
 		a {
 			font-weight: bold;
 			color: #2c3e50;
