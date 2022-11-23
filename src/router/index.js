@@ -11,6 +11,10 @@ const routes = [
     component: () => import('../CartPage/Checkout'),
   },
   {
+    path: "/map",
+    component: () => import('../MapExperiments/MapView'),
+  },
+  {
     path: "/products/:productName",
     name: 'productCard.show',
     component: () => import('../ProductPage/ProductShow'),

@@ -23,7 +23,8 @@
   <nav>
     <div class="nav__tabs">
 			<router-link to="/">Home</router-link> |
-			<router-link to="/checkout">Checkout</router-link>
+			<router-link to="/checkout">Checkout</router-link> |
+			<router-link to="/map">Map Experiments</router-link>
 		</div>
 		<SearchBar :products="store"/>
   </nav>
@@ -180,13 +181,13 @@ export default {
 
 nav {
 	width: 80%;
+	height: 10vh;
 	margin: auto;
 	display: flex;
 	align-items: center;
 	gap: 10px;
 	padding: 30px;
 	.nav__tabs {
-
 		a {
 			font-weight: bold;
 			color: #2c3e50;
