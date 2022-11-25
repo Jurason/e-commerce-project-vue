@@ -43,6 +43,7 @@ import FilterOptions from "./components/FilterOptions";
 import ProductPopup from "../components/ProductPopup";
 import ConfirmationModal from "../components/ConfirmationModal";
 import CheckoutBoard from "../components/CheckoutBoard";
+import { mapGetters } from "vuex";
 
 export default {
   name: "HomeView",
@@ -55,14 +56,10 @@ export default {
 		FilterOptions,
   },
 	props: {
-		searchResults: {type: Array, required: false}
-	},
-	mounted(){
-		this.productList = this.$root.$data.searchResults || this.$root.$data.store
+		searchQuery: {type: String, required: false}
 	},
 	data() {
     return {
-			productList: [],
 			filterOptions: {},
       currentProductForView: null,
       active: {
@@ -73,6 +70,14 @@ export default {
     };
   },
   computed: {
+		...mapGetters({
+			getProducts: "getProducts"
+		}),
+		productList(){
+			return this.searchQuery
+					? this.getProducts.filter(item => item.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
+					: this.getProducts
+		}
 	},
   methods: {
 		filterHandler(filterOptions){
@@ -96,11 +101,6 @@ export default {
 			}
     },
   },
-	watch: {
-		searchResults(){
-			this.productList = this.searchResults
-		}
-	}
 };
 </script>
 <style>

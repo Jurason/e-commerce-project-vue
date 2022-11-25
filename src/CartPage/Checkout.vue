@@ -1,7 +1,7 @@
 <template>
   <div class="cart">
     <div class="cart__cart-list cart-list">
-			<CartList :cartProducts="$root.$data.cart">
+			<CartList :cartProducts="getCartProducts">
 				<template v-slot:product="slotProp">
 					<CartProduct
 							:product="slotProp.product"
@@ -22,6 +22,7 @@ import CartProduct from "./components/CartProduct";
 import CartList from "./components/CartList";
 import CheckoutCard from "../components/CheckoutBoard";
 import ConfirmationModal from "../components/ConfirmationModal";
+import {mapGetters, mapMutations} from "vuex";
 
 export default {
   name: "Checkout-page",
@@ -38,13 +39,17 @@ export default {
       },
     };
   },
+	computed: {
+		...mapGetters(['getCartProducts']),
+	},
   methods: {
+		...mapMutations(['REMOVE_ORDERED_FROM_STORE', 'EMPTY_CART']),
     orderConfirmed(saveCartState) {
       console.log("Order Confirmed from Checkout View!");
       this.active.confirmationModal = false;
-      this.$root.$data.removeOrderedItemsFromStore();
+      this.REMOVE_ORDERED_FROM_STORE();
       if (!saveCartState) {
-        this.$root.$data.emptyCart();
+        this.EMPTY_CART();
       }
     },
   },

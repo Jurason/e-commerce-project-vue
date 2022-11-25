@@ -32,11 +32,12 @@
 import CarouselComponent from './components/Carousel'
 import BaseButton from "../../components/BaseButton";
 import ProductPopup from "../../components/ProductPopup";
+import {mapGetters} from "vuex";
 
 export default {
 	name: "ProductOverviewComponent",
 	props: {
-		product: {type: Object, required: true}
+		product: {type: Object, required: true},
 	},
 	components: {
 		CarouselComponent,
@@ -51,14 +52,15 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters(['getProductFromStore', 'getProductFromCart']),
 		productImages(){
-			return this.$root.$data.getProductFromStore(this.product).images
+			return this.product.images
 		},
 		productQuantity(){
-			return this.$root.$data.getProductFromStore(this.product).stock
+			return this.getProductFromStore(this.product).stock - (this.getProductFromCart(this.product)?.stock || 0)
 		},
 		productPrice(){
-			const price = this.$root.$data.getProductFromStore(this.product).price
+			const price = this.getProductFromStore(this.product).price
 			return price.toFixed(2)
 		}
 	}
