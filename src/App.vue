@@ -3,7 +3,8 @@
     <div class="nav__tabs">
 			<router-link to="/">Home</router-link> |
 			<router-link to="/checkout">Checkout</router-link> |
-			<router-link to="/map">Map Experiments</router-link>
+			<router-link to="/map">Map Experiments</router-link> |
+			<router-link to="/table">Table Experiments</router-link>
 		</div>
 		<SearchBar v-if="products.length"/>
   </nav>
