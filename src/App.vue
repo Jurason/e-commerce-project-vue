@@ -1,34 +1,14 @@
-//TODO
-// [ ] Сделать страницу товара (по примеру)
-// [ ] Работа с базой данных (WikipediaData)
-// [ ] Работа с базой данных (Google Maps API)
-// [ ] Авторизация
-// [x] Фаловая структура
-// [x] Навигация с клавиатуры
-// [x] Валидацию на пропсы и эмитсы
-// [x] Строка поиска
-// [x] Привести в порядок CSS в соответствии с BEM
-// [x] Сделать карусель с пагинацией
-// [x] Обработка ошибок API
-// [x] Валидацию на инпуты
-// [x] Добавить компонент загрузки во время загрузки данных
-// [x] Lazy Load
-// [x] Добавить изображения
-// [x] Transition Group
-// [x] Рефакторинг компонента корзины CartList
-
-// [?] Переписать на Vuex
-
 <template>
   <nav>
     <div class="nav__tabs">
 			<router-link to="/">Home</router-link> |
 			<router-link to="/checkout">Checkout</router-link> |
-			<router-link to="/map">Map Experiments</router-link>
+			<router-link to="/map">Map Experiments</router-link> |
+			<router-link to="/table">Table Experiments</router-link>
 		</div>
-		<SearchBar :products="store"/>
+		<SearchBar v-if="products.length"/>
   </nav>
-	<router-view v-if="store.length" />
+	<router-view v-if="products.length" />
 	<LoadingBar v-else/>
 	<div class="api-error" v-if="apiError">Something wrong with serve response!</div>
 </template>
@@ -37,9 +17,7 @@
 import { loadData } from "./api";
 import LoadingBar from "./components/LoadingBar";
 import SearchBar from "./components/SearchBar";
-
-const SHIPPING_RATE = 0.05
-export const SHIPPING_FEE = SHIPPING_RATE * 100 + "%"
+import {mapGetters, mapMutations} from "vuex";
 
 export default {
   name: "App",
@@ -50,6 +28,7 @@ export default {
 	async mounted() {
 		//api request
 		const apiResponseData = await loadData()
+		//error handling
 		if(typeof apiResponseData !== "object"){
 			this.apiError = true
 			setTimeout(() => {
@@ -62,105 +41,24 @@ export default {
 			}, 3000)
 			return
 		}
-		this.store = apiResponseData
-		//page reload
-		this.getFromLocalStorage()
-		this.urlHandler()
+		//fill cart
+		this.FILL_CART_LOCALSTORAGE()
+		//fill store
+		this.FILL_STORE(apiResponseData)
 	},
 	data() {
     return {
-      store: [],
-			cart: [],
 			apiError: false,
-			searchResults: null,
-
-			cartTotal: () => this.getCartTotal,
-			getProductFromStore: (product) => this.findProductInStore(product),
-			getProductFromCart: (product) => this.findProductInCart(product),
-
-			addProductToCart: (item, quantity) => this.addProduct(item, quantity),
-			updateProductInCart: (item, quantity) => this.updateProductQuantityInCart(item, quantity),
-			removeProductFromCart: (item) => this.removeFromCart(item),
-			removeOrderedItemsFromStore: () => this.removeOrdered(),
-			emptyCart: () => this.clearCart(),
     };
   },
 	methods: {
-		searchHandler(str){
-			this.searchResults = this.store.filter(item => item.title.toLowerCase().includes(str.toLowerCase()))
-		},
-		findProductInCart(product) {
-			return this.cart.find((t) => t.id === product.id);
-		},
-		findProductInStore(product) {
-			return this.store.find((t) => t.id === product.id);
-		},
-		setToLocalStorage(){
-			localStorage.setItem('cart-products', JSON.stringify(this.cart))
-		},
-		getFromLocalStorage(){
-			const cartProducts = localStorage.getItem('cart-products')
-			if(cartProducts){
-				this.cart = JSON.parse(cartProducts)
-			}
-		},
-		urlHandler(){
-			if(!this.$route.params?.query){
-				this.searchResults = null
-				return
-			}
-			this.searchHandler(this.$route.params.query)
-		},
-		removeFromCart(item){
-			const index = this.cart.findIndex((el) => el.id === item.id);
-			this.cart.splice(index, 1);
-			this.setToLocalStorage()
-		},
-		removeOrdered(){
-				this.cart.forEach((product) => {
-				const currentProduct = this.findProductInStore(product);
-				currentProduct.stock -= product.stock;
-			})
-		},
-		addProduct(item, quantity){
-			if(!quantity){
-				return
-			}
-			const itemToCart = JSON.parse(JSON.stringify(item));
-			itemToCart.stock = parseInt(quantity);
-			if (!this.findProductInCart(itemToCart)) {
-				this.cart.push(itemToCart);
-			} else {
-				const alreadyAdded = this.findProductInCart(itemToCart);
-				alreadyAdded.stock += itemToCart.stock;
-			}
-			this.setToLocalStorage()
-		},
-		updateProductQuantityInCart(item, newQuantity){
-			if(!newQuantity){
-				return
-			}
-			const cartItem = this.findProductInCart(item)
-			cartItem.stock = newQuantity
-			this.setToLocalStorage()
-			},
-		clearCart(){
-			this.cart = []
-			this.setToLocalStorage()
-		}
+		...mapMutations(['FILL_STORE', 'FILL_CART_LOCALSTORAGE'])
 	},
 	computed: {
-		getCartTotal() {
-			const subTotal = this.cart.reduce((acc, el) => acc + el.price * el.stock,0);
-			const total = subTotal * (1 + SHIPPING_RATE);
-			return { subTotal: subTotal, total: total };
-		},
+		...mapGetters({
+			products: "getProducts",
+		})
 	},
-	watch: {
-		$route(){
-			this.urlHandler()
-		},
-	}
 };
 </script>
 
@@ -177,23 +75,29 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+	background-color: rgb(212, 212, 212);
+	min-height: 100vh;
 }
 
 nav {
 	width: 80%;
 	height: 10vh;
-	margin: auto;
+	margin: 0 auto 20px auto;
+
 	display: flex;
 	align-items: center;
 	gap: 10px;
 	padding: 30px;
+	border-bottom: 1px solid black;
 	.nav__tabs {
+		margin-right: 100px;
+
 		a {
 			font-weight: bold;
-			color: #2c3e50;
+			color: #2c3e5087;
 
 			&.router-link-exact-active {
-				color: #42b983;
+				color: #2c3e50;
 			}
 		}
 	}

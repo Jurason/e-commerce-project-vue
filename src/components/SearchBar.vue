@@ -26,12 +26,12 @@
 
 <script>
 
+import { mapGetters } from "vuex";
+
 export default {
 	name: "SearchBar",
-	props: {
-		products: {type: Array, required: false}
-	},
 	mounted(){
+		this.products = this.getProducts
 		window.addEventListener('keydown', this.keydownHandler)
 		window.addEventListener('click', this.clickHandler)
 	},
@@ -41,12 +41,16 @@ export default {
 	},
 	data() {
 		return {
+			products: [],
 			searchInput: '',
 			currentDropdownIndex: -1,
 			isVisible: false
 		}
 	},
 	computed: {
+		...mapGetters({
+			getProducts: "getProducts"
+		}),
 		filteredList(){
 			return this.searchInput
 					? this.products.filter(product => product.title.toLowerCase().includes(this.searchInput.toLowerCase()))
@@ -108,7 +112,9 @@ export default {
 .search-block {
 	flex-grow: 1;
 	position: relative;
-	margin: 0 100px;
+	margin: 0 50px;
+	max-width: 500px;
+	min-width: 300px;
 	&__bar {
 		&__input {
 			position: relative;

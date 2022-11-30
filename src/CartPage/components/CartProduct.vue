@@ -5,7 +5,7 @@
 			<img :src="product.images['0']" alt="product" />
     </div>
     <div class="cart-product__right">
-      <div @click="removeProduct" class="cart-product__right__close-icon close-icon">X</div>
+      <div @click="REMOVE_FROM_CART(product)" class="cart-product__right__close-icon close-icon">X</div>
       <div class="cart-product__right__title">{{ product.title }}</div>
       <div class="cart-product__right__description">{{ product.description }}</div>
       <div class="cart-product__right__quantity"><span class="cart-product__right__quantity__text">Quantity:</span>
@@ -28,6 +28,7 @@
 
 <script>
 import BaseButton from "../../components/BaseButton";
+import {mapGetters, mapMutations} from "vuex";
 
 export default {
   name: "CartProduct",
@@ -46,8 +47,9 @@ export default {
     };
   },
   computed: {
+		...mapGetters(['getProductFromStore']),
 		getMaxQuantity() {
-			return this.$root.$data.getProductFromStore(this.product)?.stock || 0
+			return this.getProductFromStore(this.product)?.stock || 0
 		},
     availableQuantity() {
       return this.counter < this.getMaxQuantity;
@@ -57,15 +59,13 @@ export default {
     },
   },
   methods: {
-		removeProduct() {
-			this.$root.$data.removeProductFromCart(this.product)
-		},
+		...mapMutations(['REMOVE_FROM_CART', 'UPDATE_QUANTITY_IN_CART']),
   },
   watch: {
     counter() {
 			this.counter = this.counter < 1 ? 1 : this.counter
 			this.counter = this.counter > this.getMaxQuantity ? this.getMaxQuantity : this.counter
-			this.$root.$data.updateProductInCart(this.product, this.counter)
+			this.UPDATE_QUANTITY_IN_CART({ product: this.product, newQuantity: this.counter })
     },
 		getMaxQuantity(){
 			this.counter = this.counter > this.getMaxQuantity ? this.getMaxQuantity : this.counter
@@ -82,8 +82,7 @@ export default {
 	box-shadow: 0 0 5px grey;
 	padding: 10px;
 	border-radius: 15px;
-	border: 2px solid yellowgreen;
-	background-color: sandybrown;
+	background-color: rgb(235, 229, 227);
 	overflow: hidden;
 }
 .cart-product__disabled {

@@ -70,7 +70,7 @@ export default {
 						this.currentCoords.lng = lng
 					})
 					.then(() => this.setView())
-					.catch(err => err.status)
+					.catch(err => console.log(err.message))
 		},
 		setView(){
 			this.$options.map.setView([this.currentCoords.lat, this.currentCoords.lng], 6);
@@ -90,7 +90,6 @@ export default {
 	flex-direction: column;
 	height: 90vh;
 	max-height: 90vh;
-	border: 1px solid black;
 }
 .creation-box {
 	margin: 30px auto;

@@ -23,6 +23,7 @@ const routes = [
       {
         path: ":tabName",
         name: 'productCard.info',
+        prop: route => ({tabName: route.params.tabName})
       },
     ]
   },
@@ -30,11 +31,17 @@ const routes = [
     path: "/search/:query",
     name: 'searchResults.show',
     component: () => import('../MainPage/SearchResultsView'),
+    prop: route => ({query: route.params.query})
   },
   {
     path: "/map",
     name: "map.show",
     component: () => import('../MapExperiments/MapView')
+  },
+  {
+    path: "/table",
+    name: "table.show",
+    component: () => import('../TableExperiments/TableView')
   }
 ];
 

@@ -6,7 +6,7 @@
 		<hr class="checkout-container__line">
     <div class="checkout-container__content">
       <div class="checkout-container__content__subtotal"><b>Subtotal:</b> ${{ getSubTotal.toFixed(2) }}</div>
-      <div class="checkout-container__content__shipping"><b>Shipping:</b> {{ $options.SHIPPING_FEE }}</div>
+      <div class="checkout-container__content__shipping"><b>Shipping:</b> {{ getShippingFee }}</div>
       <div class="checkout-container__content__total"><b>Total:</b> ${{ getTotal.toFixed(2) }}</div>
     </div>
     <div class="checkout-container__content__footer">
@@ -20,25 +20,29 @@
 </template>
 
 <script>
-import { SHIPPING_FEE } from "../App";
 import BaseButton from "./BaseButton";
+import { mapGetters } from "vuex";
 
 export default {
 	components: {
 		BaseButton
 	},
-	SHIPPING_FEE: SHIPPING_FEE,
   name: "CheckoutBoard",
   emits: { checkout: null },
 	computed: {
+		...mapGetters({
+			getCartProducts: 'getCartProducts',
+			getCartTotal: 'getCartTotal',
+			getShippingFee: 'getShippingFee'
+		}),
 		getTotal(){
-			return this.$root.$data.cartTotal().total
+			return this.getCartTotal.total
 		},
 		getSubTotal(){
-			return this.$root.$data.cartTotal().subTotal
+			return this.getCartTotal.subTotal
 		},
 		isCartEmpty(){
-			return !this.$root.$data.cart.length
+			return !this.getCartProducts.length
 		}
 	},
 	methods: {
@@ -62,7 +66,7 @@ export default {
   border-radius: 1em;
   padding: 20px;
   box-shadow: 0 0 5px grey;
-	background-color: rgb(79, 160, 187);
+	background-color: rgb(235, 229, 227);
 }
 .checkout-container__line{
 	width: 100%;
@@ -83,9 +87,9 @@ export default {
 .checkout-container__content__footer {
   width: 90%;
   .button-base {
-    background-color: rgb(16, 39, 47);
+    background-color: #ADADADC7;
 		width: 100%;
-		color: rgb(79, 160, 187);
+		color: black;
 		box-shadow: 0 0 5px #fff;
   }
 	.button-base__disabled {

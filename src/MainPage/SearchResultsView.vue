@@ -1,5 +1,5 @@
 <template>
-	<HomeView :searchResults="$root.$data.searchResults"/>
+	<HomeView :searchQuery="searchQuery"/>
 </template>
 
 <script>
@@ -9,6 +9,11 @@ export default {
 	components: {
 		HomeView
 	},
+	computed: {
+		searchQuery(){
+			return this.$route.params.query.toString()
+		}
+	}
 }
 </script>
 

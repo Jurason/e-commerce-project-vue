@@ -5,14 +5,14 @@
 		</div>
 		<div class="product-overview__navbar">
 			<ul class="product-overview__navbar__tabs__list tabs__list">
-				<li class="tabs__list__item item" :class="{'active-tab': currentTab === 'overview'}" @click="activeTab($event.target.textContent.toLowerCase())">
-					<router-link class="item__link" :to="{name: 'productCard.info', params: {tabName: 'overview'}}">Overview</router-link>
+				<li class="tabs__list__item item" :class="{'active-tab': currentTab === $options.overviewTab }" @click="activeTab">
+					<router-link class="item__link" :to="{name: 'productCard.info', params: {tabName: $options.overviewTab}}">{{ $options.overviewTab }}</router-link>
 				</li>
-				<li class="tabs__list__item" :class="{'active-tab': currentTab === 'details'}" @click="activeTab($event.target.textContent.toLowerCase())">
-					<router-link class="item__link" :to="{name: 'productCard.info', params: {tabName: 'details'}}">Details</router-link>
+				<li class="tabs__list__item" :class="{'active-tab': currentTab === $options.detailsTab}" @click="activeTab">
+					<router-link class="item__link" :to="{name: 'productCard.info', params: {tabName: $options.detailsTab}}">{{ $options.detailsTab }}</router-link>
 				</li>
-				<li class="tabs__list__item" :class="{'active-tab': currentTab === 'reviews'}" @click="activeTab($event.target.textContent.toLowerCase())">
-					<router-link class="item__link" :to="{name: 'productCard.info', params: {tabName: 'reviews'}}">Reviews</router-link>
+				<li class="tabs__list__item" :class="{'active-tab': currentTab === $options.reviewsTab}" @click="activeTab">
+					<router-link class="item__link" :to="{name: 'productCard.info', params: {tabName: $options.reviewsTab}}">{{ $options.reviewsTab }}</router-link>
 				</li>
 			</ul>
 		</div>
@@ -24,7 +24,7 @@
 	</section>
 	<div class="product-related">
 		<h2 class="product-related__header">Related products</h2>
-		<RelatedProductsSlider :productList="$root.$data.store"/>
+		<RelatedProductsSlider :productList="$store.state.products"/>
 	</div>
 </template>
 
@@ -33,6 +33,8 @@ import ProductOverviewComponent from "./ProductOverview/ProductOverviewComponent
 import ProductDetailsComponent from "./components/ProductDetailsComponent";
 import ProductReviewsComponent from "./components/ProductReviewsComponent";
 import RelatedProductsSlider from "./components/SliderRelatedProducts";
+import {mapGetters} from "vuex";
+
 export default {
 	name: "ProductShow",
 	components: {
@@ -41,16 +43,19 @@ export default {
 	props: {
 		productName: {type: String, required: true}
 	},
-	mounted(){
-		this.initComponent()
-	},
+	overviewTab: 'Overview',
+	detailsTab: 'Details',
+	reviewsTab: 'Reviews',
 	data(){
 		return {
-			product: null,
-			currentTab: 'overview',
+			currentTab: this.$options.overviewTab,
 		}
 	},
 	computed: {
+		...mapGetters(['getProductFromStoreByTitle']),
+		product(){
+			return this.getProductFromStoreByTitle(this.productName)
+		},
 		currentTabComponent(){
 			switch (this.currentTab) {
 				case 'overview':
@@ -65,17 +70,13 @@ export default {
 		},
 	},
 	methods: {
-		initComponent(){
-			this.product = this.$root.$data.store.find(item => item.title === this.productName)
-		},
-		activeTab(tabName){
-			this.currentTab = tabName
+		activeTab(event){
+			this.currentTab = event.target.textContent
 		},
 	},
 	watch: {
 		productName(){
-			this.initComponent()
-			this.currentTab = 'overview'
+			this.currentTab = this.$options.overviewTab
 		}
 	}
 }

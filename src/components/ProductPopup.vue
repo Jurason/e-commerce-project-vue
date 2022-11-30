@@ -35,6 +35,7 @@
 
 <script>
 import BaseButton from "./BaseButton";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "ProductPopup",
@@ -60,16 +61,20 @@ export default {
 		document.removeEventListener("click", this.handleClick);
   },
   computed: {
+		...mapGetters({
+			getProductFromCart: 'getProductFromCart'
+		}),
     isAvailableQuantity() {
       return (
         this.maxQuantityForCurrentProduct >= this.quantityInput && this.maxQuantityForCurrentProduct
       );
     },
 		getProductQuantityInCart() {
-			return this.$root.$data.getProductFromCart(this.product)?.stock || 0
+			return this.getProductFromCart(this.product)?.stock || 0
 		}
   },
   methods: {
+		...mapMutations(['ADD_PRODUCT_TO_CART']),
     handleKeydown(e) {
       if (this.isOpen && e.key === "Escape") {
         this.$emit("close");
@@ -95,7 +100,7 @@ export default {
       if (!this.quantityInput) {
         return;
       }
-			this.$root.$data.addProductToCart(this.product, this.quantityInput)
+			this.ADD_PRODUCT_TO_CART({product: this.product, quantity: this.quantityInput})
     },
     updateCurrentQuantity() {
 			this.maxQuantityForCurrentProduct = this.product.stock - this.getProductQuantityInCart;
@@ -150,7 +155,7 @@ export default {
   flex-direction: column;
 	justify-content: space-between;
   gap: 10px;
-  background-color: whitesmoke;
+  background-color: rgb(235, 229, 227);
   border-radius: 1em;
   .popup__content__close-icon {
     padding: 20px;
