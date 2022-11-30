@@ -23,7 +23,7 @@ export default {
 	padding: 10px;
 	border-radius: 10px;
 	border: none;
-	background-color: rgb(79, 160, 187);
+	background-color: #ADADADC7;
 	color: black;
 	font-weight: bold;
 	cursor: pointer;

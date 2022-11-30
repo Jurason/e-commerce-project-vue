@@ -37,6 +37,11 @@ const routes = [
     path: "/map",
     name: "map.show",
     component: () => import('../MapExperiments/MapView')
+  },
+  {
+    path: "/table",
+    name: "table.show",
+    component: () => import('../TableExperiments/TableView')
   }
 ];
 

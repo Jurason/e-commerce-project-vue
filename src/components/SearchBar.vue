@@ -112,7 +112,9 @@ export default {
 .search-block {
 	flex-grow: 1;
 	position: relative;
-	margin: 0 100px;
+	margin: 0 50px;
+	max-width: 500px;
+	min-width: 300px;
 	&__bar {
 		&__input {
 			position: relative;
