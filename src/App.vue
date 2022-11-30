@@ -83,6 +83,7 @@ nav {
 	width: 80%;
 	height: 10vh;
 	margin: 0 auto 20px auto;
+
 	display: flex;
 	align-items: center;
 	gap: 10px;
@@ -90,6 +91,7 @@ nav {
 	border-bottom: 1px solid black;
 	.nav__tabs {
 		margin-right: 100px;
+
 		a {
 			font-weight: bold;
 			color: #2c3e5087;
