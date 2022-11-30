@@ -66,7 +66,7 @@ export default {
   border-radius: 1em;
   padding: 20px;
   box-shadow: 0 0 5px grey;
-	background-color: rgb(79, 160, 187);
+	background-color: rgb(235, 229, 227);
 }
 .checkout-container__line{
 	width: 100%;
@@ -87,9 +87,9 @@ export default {
 .checkout-container__content__footer {
   width: 90%;
   .button-base {
-    background-color: rgb(16, 39, 47);
+    background-color: #ADADADC7;
 		width: 100%;
-		color: rgb(79, 160, 187);
+		color: black;
 		box-shadow: 0 0 5px #fff;
   }
 	.button-base__disabled {

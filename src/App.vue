@@ -75,23 +75,27 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+	background-color: rgb(212, 212, 212);
+	min-height: 100vh;
 }
 
 nav {
 	width: 80%;
 	height: 10vh;
-	margin: auto;
+	margin: 0 auto 20px auto;
 	display: flex;
 	align-items: center;
 	gap: 10px;
 	padding: 30px;
+	border-bottom: 1px solid black;
 	.nav__tabs {
+		margin-right: 100px;
 		a {
 			font-weight: bold;
-			color: #2c3e50;
+			color: #2c3e5087;
 
 			&.router-link-exact-active {
-				color: #42b983;
+				color: #2c3e50;
 			}
 		}
 	}

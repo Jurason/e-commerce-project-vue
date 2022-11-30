@@ -82,8 +82,7 @@ export default {
 	box-shadow: 0 0 5px grey;
 	padding: 10px;
 	border-radius: 15px;
-	border: 2px solid yellowgreen;
-	background-color: sandybrown;
+	background-color: rgb(235, 229, 227);
 	overflow: hidden;
 }
 .cart-product__disabled {

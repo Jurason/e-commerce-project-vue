@@ -1,7 +1,7 @@
 <template>
   <div class="product-card">
     <router-link style="text-decoration: none" :to="{name: 'productCard.show', params: {productName: product.title}}">
-			<h3>{{ product.title }}</h3>
+			<h3 class="product-card__title">{{ product.title }}</h3>
 		</router-link>
 			<div class="product-card__description">{{ descriptionHandler }}</div>
 			<div class="product-card__price">Price: ${{ priceHandler }}</div>
@@ -66,11 +66,14 @@ export default {
   flex-direction: column;
   gap: 5px;
   align-items: center;
-  background-color: sandybrown;
+  background-color: rgb(235, 229, 227);
   box-shadow: 0 0 5px grey;
   padding: 10px;
   border-radius: 15px;
 	cursor: pointer;
+}
+.product-card__title {
+	color: black;
 }
 .disabled {
   &:before {

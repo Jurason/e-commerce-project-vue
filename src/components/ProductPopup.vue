@@ -155,7 +155,7 @@ export default {
   flex-direction: column;
 	justify-content: space-between;
   gap: 10px;
-  background-color: whitesmoke;
+  background-color: rgb(235, 229, 227);
   border-radius: 1em;
   .popup__content__close-icon {
     padding: 20px;
