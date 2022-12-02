@@ -2,8 +2,8 @@
   <div class="checkout-container">
     <div class="checkout-container__header">
       <p class="checkout-container__header__title">ORDER SUMMARY</p>
+			<hr class="checkout-container__line">
     </div>
-		<hr class="checkout-container__line">
     <div class="checkout-container__content">
       <div class="checkout-container__content__subtotal"><b>Subtotal:</b> ${{ getSubTotal.toFixed(2) }}</div>
       <div class="checkout-container__content__shipping"><b>Shipping:</b> {{ getShippingFee }}</div>
@@ -59,10 +59,9 @@ export default {
 .checkout-container {
 	height: 250px;
 	width: 200px;
-	display: flex;
-  flex-direction: column;
+	display: grid;
+  grid-template-rows: 1fr 3fr 1fr;
 	align-items: center;
-	justify-content: space-between;
   border-radius: 1em;
   padding: 20px;
   box-shadow: 0 0 5px grey;
@@ -70,6 +69,7 @@ export default {
 }
 .checkout-container__line{
 	width: 100%;
+	margin: 0;
 	border: 1px solid rgb(16, 39, 47);
 	background-color: rgb(16, 39, 47);
 }
@@ -78,14 +78,13 @@ export default {
 }
 .checkout-container__content {
 	height: 100%;
-	margin: 10% auto;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: space-around;
 	align-items: baseline;
 }
 .checkout-container__content__footer {
-  width: 90%;
+  width: 100%;
   .button-base {
     background-color: #ADADADC7;
 		width: 100%;

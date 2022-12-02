@@ -4,32 +4,30 @@
 		<div class="search-block__bar">
 			<input
 					v-model="searchInput"
-					class="search-block__bar__input" type="text" placeholder=""
+					class="search-block__bar__input" type="text" placeholder="Enter product name..."
 					@focus="isVisible = true"
 					ref="searchInput"
 			>
 		</div>
-		<ul @mouseover="resetDropdownIndex" v-if="isVisible" class="search-block__results">
-			<li
-					@click="searchInput = ''"
-					v-for="(product, index) in handledFilteredList" :key="product.id"
-					:class="{'focused': index === currentDropdownIndex}"
-					class="search-block__results__item"
-			>
-				<router-link style="text-decoration: none; width: 100%; cursor: pointer" :to="{name: 'productCard.show', params: {productName: product.title}}">
-				{{ product.title }}
-				</router-link>
-			</li>
-		</ul>
+		<DropdownList v-if="isVisible" :itemsList="filteredList || []" @emptyInput="searchInput = ''">
+			<template #item="slotProp">
+				<DropdownItem :item="slotProp.item"/>
+			</template>
+		</DropdownList>
 	</div>
 </template>
 
 <script>
-
 import { mapGetters } from "vuex";
-
+import DropdownList from "./DropdownList";
+import DropdownItem from "./DropdownItem";
 export default {
 	name: "SearchBar",
+	components: {
+		DropdownList,
+		DropdownItem
+	},
+
 	mounted(){
 		this.products = this.getProducts
 		window.addEventListener('keydown', this.keydownHandler)
@@ -43,7 +41,6 @@ export default {
 		return {
 			products: [],
 			searchInput: '',
-			currentDropdownIndex: -1,
 			isVisible: false
 		}
 	},
@@ -56,31 +53,17 @@ export default {
 					? this.products.filter(product => product.title.toLowerCase().includes(this.searchInput.toLowerCase()))
 					: ''
 		},
-		handledFilteredList(){
-			return this.filteredList.slice(0,10)
-		},
 		filteredListLength(){
 			return this.filteredList.length
 		},
 	},
 	methods: {
-		resetDropdownIndex(){
-			this.currentDropdownIndex = -1
-		},
 		keydownHandler(e){
 			if(this.filteredListLength && e.key === 'Enter'){
 				this.searchInput = this.currentDropdownIndex >= 0 ? this.filteredList[this.currentDropdownIndex].title : this.searchInput
 				this.$refs.searchInput.blur()
 				this.isVisible = false
 				this.searchConfirm()
-			}
-			if(this.searchInput && e.key === 'ArrowUp'){
-				this.currentDropdownIndex--
-				if(this.currentDropdownIndex < 0) this.currentDropdownIndex = -1
-			}
-			if(this.searchInput && e.key === 'ArrowDown'){
-				this.currentDropdownIndex++
-				if(this.currentDropdownIndex > this.filteredListLength - 1) this.currentDropdownIndex = 0
 			}
 		},
 		clickHandler(){
@@ -144,11 +127,5 @@ export default {
 			}
 		}
 	}
-}
-.search-block__results__item:hover {
-	background-color: lightgrey;
-}
-.focused {
-	background-color: lightgrey;
 }
 </style>

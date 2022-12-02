@@ -143,7 +143,7 @@ export default {
 .popup__container {
 	width: 500px;
 	height: 250px;
-	margin-left: calc(50% - 250px);
+	margin-left: calc(50% - 350px);
 	margin-top: 15%;
 }
 .popup__content {
@@ -173,10 +173,16 @@ export default {
 		align-items: center;
 		justify-content: center;
 		gap: 10px;
+		button {
+			font-size: 14px;
+		}
 		.popup__content__footer__quantity-input {
+			display: block;
+			height: 100%;
 			max-width: 100px;
 			padding: 5px;
 			outline: none;
+			font-size: 14px;
 		}
 		.popup__content__footer__quantity {
 			font-size: 14px;

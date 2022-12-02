@@ -122,6 +122,7 @@ export default {
       width: 50px;
       text-align: center;
 			height: 100%;
+			font-size: 14px;
     }
 		.button-base {
 			padding: 5px 10px;
