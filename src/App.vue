@@ -16,7 +16,7 @@
 <script>
 import { loadData } from "./api";
 import LoadingBar from "./components/LoadingBar";
-import SearchBar from "./components/SearchBar";
+import SearchBar from "./components/SearchBar/SearchBar";
 import {mapGetters, mapMutations} from "vuex";
 
 export default {
