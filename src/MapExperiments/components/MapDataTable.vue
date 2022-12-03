@@ -4,11 +4,11 @@
 			:items="itemsList"
 			:fields="fields"
 	>
-		<template #cell(combine)="data">
-			{{ data.item.latitude }} : {{ data.item.longitude }}
-		</template>
 		<template #head(name)="data">
 			<span style="color: blue">{{ data.label.toUpperCase()}}</span>
+		</template>
+		<template #cell(delete)="data">
+			<button @click="$emit('remove-item', data.item)">X</button>
 		</template>
 	</BTable>
 </template>
@@ -23,6 +23,9 @@ export default {
 	},
 	props: {
 		itemsList: {type: Array, required: true},
+	},
+	emits: {
+		'remove-item': Object,
 	},
 	data(){
 		return {
@@ -43,24 +46,33 @@ export default {
 					sortable: true
 				},
 				{
-					key: 'combine',
-					label: 'Coordinates',
+					key: 'delete',
+					label: '',
 					sortable: true
 				}
 			]
 		}
 	},
+	computed: {
+		itemsListLength(){
+			return this.itemsList.length
+		}
+	},
 	methods: {
-		addTablePosition(){
-			this.searchInput = this.searchInput[0].toUpperCase() + this.searchInput.slice(1).toLowerCase()
-			this.markersList.push({
-				name: this.searchInput,
-				latitude: this.currentCoords.lat,
-				longitude: this.currentCoords.lng,
+		handleTableData(){
+			this.itemsList.forEach(item => {
+				item['name'] = item['name'].split(' ').map(word => {
+					return word[0].toUpperCase() + word.slice(1).toLowerCase()
+				}).join(' ')
 			})
-			localStorage.setItem('marker-list', JSON.stringify(this.markersList))
 		},
 	},
+	watch: {
+		itemsListLength(){
+			this.handleTableData()
+			localStorage.setItem('marker-list', JSON.stringify(this.itemsList))
+		}
+	}
 }
 </script>
 

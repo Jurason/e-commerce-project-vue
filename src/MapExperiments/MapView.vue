@@ -6,10 +6,13 @@
 		<div class="map-container">
 			<MapComponent
 			:coordinatesToDisplay="coordinatesToDisplay"
+			:markersList="dataToDisplay"
+			:markerToRemove="markerToRemove"
 			/>
 			<div class="marker-table">
 				<MapDataTable
 				:itemsList="dataToDisplay"
+				@remove-item="removeItem($event)"
 				/>
 			</div>
 		</div>
@@ -23,7 +26,7 @@ import { getCoords } from "./api";
 export const INITIAL_COORDS = {
 	latitude: 46.44,
 	longitude: 30.71,
-	zoom: 11
+	zoom: 6
 }
 export default {
 	name: "MapView",
@@ -32,6 +35,11 @@ export default {
 		MapComponent,
 		MapSearchInput
 	},
+	mounted(){
+		if(localStorage.getItem('marker-list')){
+			this.dataToDisplay = JSON.parse(localStorage.getItem('marker-list'))
+		}
+	},
 	data(){
 		return {
 			dataToDisplay: [],
@@ -39,15 +47,24 @@ export default {
 				latitude: INITIAL_COORDS.latitude,
 				longitude: INITIAL_COORDS.longitude,
 				zoom: INITIAL_COORDS.zoom
-			}
+			},
+			markerToRemove: null
 		}
 	},
 	methods: {
+		removeItem(item){
+			this.markerToRemove = item
+			this.dataToDisplay = this.dataToDisplay.filter(item => item['name'] !== item['name'])
+		},
 		async searchQueryHandler(query){
-			query = query.toLowerCase()
 			const responseData = await getCoords(query)
 			if(responseData){
 				this.coordinatesToDisplay = responseData
+				// already added to table ?
+				if(this.dataToDisplay.some(item => item['name'].toLowerCase() === responseData['name'])){
+					return
+				}
+				this.dataToDisplay.push(responseData)
 			}
 		},
 	},

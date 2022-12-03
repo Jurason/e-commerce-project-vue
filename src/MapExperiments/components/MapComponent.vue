@@ -1,4 +1,4 @@
-//what this component do?
+//	what this component do?
 // - display the map view at the specified coordinates
 
 <template>
@@ -11,7 +11,9 @@ import leaflet from "leaflet";
 export default {
 	name: "MapComponent",
 	props: {
-		coordinatesToDisplay: {type: Object, required: true}
+		coordinatesToDisplay: {type: Object, required: true},
+		markersList: {type: Object, required: false},
+		markerToRemove: {type: Object, required: false},
 	},
 	map: null,
 	mounted(){
@@ -23,31 +25,31 @@ export default {
 			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 		}).addTo(this.$options.map);
 
-		this.markersList = JSON.parse(localStorage.getItem('marker-list')) || []
-		this.markersList?.forEach(marker => leaflet.marker([marker.latitude, marker.longitude]).addTo(this.$options.map))
-	},
-	data(){
-		return {
-			markersList: []
-		}
-	},
-	computed: {
-		// isAlreadyAdded(){
-		// 	return this.markersList.some(marker => marker.latitude === this.coordinatesToDisplay.lat && marker.longitude === this.coordinatesToDisplay.lng)
-		// }
+		this.markersList?.forEach(this.addMarker)
 	},
 	methods: {
 		setView(){
 			const { latitude:lat, longitude:lng, zoom } = this.coordinatesToDisplay
 			this.$options.map.setView([lat, lng], zoom);
 		},
-		// addMarker(){
-		// 	leaflet.marker([this.coordinatesToDisplay.latitude, this.coordinatesToDisplay.longitude]).addTo(this.$options.map)
-		// },
+		addMarker(marker){
+			leaflet.marker([marker.latitude, marker.longitude]).addTo(this.$options.map)
+		},
+		removeMarker(marker){
+			console.log('remove marker')
+			this.$options.map.removeLayer(marker)
+		}
 	},
 	watch: {
-		coordinatesToDisplay(){
+		coordinatesToDisplay(newValue){
 			this.setView()
+			this.addMarker(newValue)
+			// console.log('this.markersList:', this.markersList)
+
+		},
+		markerToRemove(newValue){
+			this.removeMarker([newValue.latitude, newValue.longitude])
+			console.log('newValue:', newValue)
 		}
 	}
 }
