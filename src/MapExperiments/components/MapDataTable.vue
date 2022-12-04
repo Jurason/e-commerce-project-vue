@@ -10,6 +10,9 @@
 		<template #cell(delete)="data">
 			<button @click="$emit('remove-item', data.item)">X</button>
 		</template>
+		<template #cell(show)="data">
+			<button @click="$emit('show-item', data.item)">show</button>
+		</template>
 	</BTable>
 </template>
 
@@ -25,7 +28,8 @@ export default {
 		itemsList: {type: Array, required: true},
 	},
 	emits: {
-		'remove-item': Object,
+		'remove-item': item => typeof item === 'object',
+		'show-item': item => typeof item === 'object',
 	},
 	data(){
 		return {
@@ -46,9 +50,12 @@ export default {
 					sortable: true
 				},
 				{
+					key: 'show',
+					label: 'show',
+				},
+				{
 					key: 'delete',
 					label: '',
-					sortable: true
 				}
 			]
 		}
